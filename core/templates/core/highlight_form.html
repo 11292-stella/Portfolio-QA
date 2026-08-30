@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<a href="{% url 'core:home' %}" class="btn btn-outline-secondary btn-sm mb-4">&larr; torna alla home</a>
+
+<p class="eyebrow">// nuovo highlight</p>
+<h1>Aggiungi a: {{ experience.ruolo }}</h1>
+
+<div class="hero-terminal mt-4">
+    <form method="post">
+        {% csrf_token %}
+        {% crispy form %}
+        <button type="submit" class="btn btn-outline-accent mt-3">Salva highlight</button>
+    </form>
+</div>
+
+{% endblock %}

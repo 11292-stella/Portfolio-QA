@@ -1,0 +1,444 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block content %}
+
+<script>
+/* Helper condivisi da tutte le simulazioni della pagina */
+window.__sim = (function () {
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    async function typeText(node, text, speed = 14) {
+        node.classList.add('active');
+        node.innerHTML = '<span class="typed"></span><span class="cursor-blink"></span>';
+        const typed = node.querySelector('.typed');
+        for (const ch of text) { typed.textContent += ch; await sleep(speed); }
+        await sleep(300);
+        node.querySelector('.cursor-blink')?.remove();
+    }
+
+    async function selectFake(node, label) {
+        node.classList.add('active');
+        node.textContent = '';
+        await sleep(150);
+        node.textContent = label;
+        await sleep(400);
+    }
+
+    async function fillUpload(node, delay = 1400) {
+        node.classList.add('active');
+        await sleep(delay);
+    }
+
+    function renderPills(container, list) {
+        container.innerHTML = '';
+        list.forEach(t => {
+            const span = document.createElement('span');
+            span.className = 'pill';
+            span.textContent = t;
+            span.dataset.tech = t;
+            container.appendChild(span);
+        });
+    }
+
+    async function checkPill(container, tech, delay = 220) {
+        const pill = container.querySelector(`[data-tech="${CSS.escape(tech)}"]`);
+        if (pill) { pill.classList.add('on'); await sleep(delay); }
+    }
+
+    async function checkAllPills(container, delay = 150) {
+        const items = [...container.children];
+        items.forEach(async (p, i) => { await sleep(i * delay); p.classList.add('on'); });
+        await sleep(items.length * delay + 200);
+    }
+
+    async function runExperienceSim(prefix, DATASET, ALL_TECH) {
+        const el = id => document.getElementById(prefix + '-' + id);
+        const azione = el('azione'), area = el('area'), pills = el('pills'),
+              techRow = el('tech-row'), dettaglio = el('dettaglio'), ordine = el('ordine'),
+              btn = el('btn'), status = el('status');
+
+        if (!ALL_TECH.length) { if (techRow) techRow.style.display = 'none'; }
+        else { renderPills(pills, ALL_TECH); }
+
+        async function resetForm() {
+            azione.textContent = '- Select an option -'; azione.classList.remove('active');
+            area.textContent = '- Select an option -'; area.classList.remove('active');
+            dettaglio.innerHTML = ''; dettaglio.classList.remove('active');
+            ordine.textContent = '0';
+            if (ALL_TECH.length) renderPills(pills, ALL_TECH);
+            btn.classList.remove('saved');
+            status.innerHTML = '&nbsp;';
+            await sleep(500);
+        }
+
+        async function cycle() {
+            for (const item of DATASET) {
+                await resetForm();
+                await selectFake(azione, item.azione);
+                await selectFake(area, item.area);
+                if (item.tech) for (const t of item.tech) await checkPill(pills, t);
+                await typeText(dettaglio, item.dettaglio, 16);
+                ordine.textContent = String(item.ordine);
+                await sleep(300);
+                btn.classList.add('saved');
+                status.innerHTML = '<span class="ok">&#10003;</span> highlight salvato';
+                await sleep(1400);
+            }
+            await sleep(700);
+            cycle();
+        }
+        cycle();
+    }
+
+    return { sleep, typeText, selectFake, fillUpload, renderPills, checkPill, checkAllPills, runExperienceSim };
+})();
+</script>
+
+<section class="mb-5">
+    <p class="eyebrow">// chi sono</p>
+
+    <div class="hero-terminal">
+        <div class="terminal-photo-wrap" id="ps-foto">
+            <div class="terminal-photo">
+                <img src="{% static 'core/img/io-disegno.png' %}" alt="Foto profilo (disegno)" class="terminal-photo-img">
+            </div>
+            <span class="terminal-photo-caption">io-profilo.png</span>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-6">
+                <span class="field-label">Ruolo</span>
+                <div class="fake-select" id="ps-ruolo">- Select an option -</div>
+            </div>
+            <div class="col-6">
+                <span class="field-label">Disponibilità</span>
+                <div class="fake-select" id="ps-disp">- Select an option -</div>
+            </div>
+        </div>
+
+        <span class="field-label clear-photo">Chi sono</span>
+        <div class="fake-textarea" id="ps-bio"></div>
+
+        <span class="field-label">Cosa cerco</span>
+        <div class="fake-textarea" id="ps-obiettivo"></div>
+
+        <span class="field-label">Stack</span>
+        <div class="tech-pills" id="ps-pills"></div>
+
+        <div class="fake-btn mt-2" id="ps-btn">Salva presentazione</div>
+        <div class="status-line" id="ps-status">&nbsp;</div>
+    </div>
+</section>
+
+<script>
+(function () {
+    const S = window.__sim;
+    const RUOLO = "QA Automation Engineer & Full Stack Developer";
+    const DISP = "Full Remote / Disponibile a Trasferimento | Dipendente & Freelance (P.IVA)";
+    const BIO = "Sono una QA Automation Engineer con un background da Full Stack Developer. Sviluppo e mantengo architetture di test automatici E2E e pipeline CI/CD (Cypress, Playwright, Appium, GitLab CI), garantendo la stabilità delle applicazioni dal codice alla sicurezza. La mia formazione nello sviluppo mi permette di leggere e analizzare direttamente il codice sorgente per individuare la radice dei problemi, mentre le mie origini nel graphic design guidano la mia attenzione per l'usabilità e la UX.";
+    const OBIETTIVO = `Aperta a collaborazioni sia in Partita IVA sia come dipendente (Full Remote o con disponibilità al trasferimento). Cerco opportunità come QA Automation Engineer, Full Stack Developer o in ruoli ibridi, dove mettere a disposizione la progettazione autonoma di framework E2E multi-stack, il debug di codice frontend/backend e lo sviluppo software.`;
+    const TECH = [
+  // QA & Automation
+  "Cypress", "Playwright", "Appium", "Python", "Pytest", "Postman",
+  // DevOps & CI/CD
+  "GitLab CI/CD", "Docker",
+  // Frontend & Mobile
+  "React", "Redux", "Flutter", "JavaScript", "HTML5/CSS3",
+  // Backend & DB
+  "Django", "Java", "Spring Boot", "PostgreSQL", "REST API"
+];
+
+    const el = id => document.getElementById(id);
+    const ruolo = el('ps-ruolo'), disp = el('ps-disp'), foto = el('ps-foto'), bio = el('ps-bio'),
+          obiettivo = el('ps-obiettivo'), pills = el('ps-pills'), btn = el('ps-btn'),
+          status = el('ps-status');
+
+    async function resetForm() {
+        ruolo.textContent = '- Select an option -'; ruolo.classList.remove('active');
+        disp.textContent = '- Select an option -'; disp.classList.remove('active');
+        foto.classList.remove('active');
+        bio.innerHTML = ''; bio.classList.remove('active');
+        obiettivo.innerHTML = ''; obiettivo.classList.remove('active');
+        S.renderPills(pills, TECH);
+        btn.classList.remove('saved');
+        status.innerHTML = '&nbsp;';
+        await S.sleep(500);
+    }
+
+    async function runCycle() {
+        while (true) {
+            await resetForm();
+            await S.selectFake(ruolo, RUOLO);
+            await S.selectFake(disp, DISP);
+            await S.fillUpload(foto);
+            await S.typeText(bio, BIO);
+            await S.typeText(obiettivo, OBIETTIVO);
+            await S.checkAllPills(pills);
+            await S.sleep(300);
+            btn.classList.add('saved');
+            status.innerHTML = '<span class="ok">&#10003;</span> presentazione salvata';
+            await S.sleep(3500);
+        }
+    }
+
+    S.renderPills(pills, TECH);
+    runCycle();
+})();
+</script>
+
+{% if exp_sellogic %}
+<section class="mb-5">
+    <p class="eyebrow">// esperienza — Sellogic S.r.l.</p>
+
+    <div class="hero-terminal">
+        <div class="row g-3 mb-3">
+            <div class="col-6">
+                <span class="field-label">Azione</span>
+                <div class="fake-select" id="sg-azione">- Select an option -</div>
+            </div>
+            <div class="col-6">
+                <span class="field-label">Area</span>
+                <div class="fake-select" id="sg-area">- Select an option -</div>
+            </div>
+        </div>
+
+        <div id="sg-tech-row">
+            <span class="field-label">Tecnologie</span>
+            <div class="tech-pills" id="sg-pills"></div>
+        </div>
+
+        <span class="field-label">Dettaglio</span>
+        <div class="fake-textarea" id="sg-dettaglio"></div>
+
+        <div class="row g-3" style="max-width: 160px;">
+            <div class="col">
+                <span class="field-label">Ordine</span>
+                <div class="fake-input" id="sg-ordine">0</div>
+            </div>
+        </div>
+
+        <div class="fake-btn mt-3" id="sg-btn">Salva highlight</div>
+        <div class="status-line" id="sg-status">&nbsp;</div>
+
+        <p class="sim-caption">simulazione del flusso Playwright che uso per popolare questi contenuti — non esecuzione live</p>
+    </div>
+
+    <div class="card project-card experience-card mt-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                <div>
+                    <h5 class="card-title mb-1">{{ exp_sellogic.ruolo }}</h5>
+                    <span class="project-meta">{{ exp_sellogic.azienda }}</span>
+                </div>
+                <span class="project-meta">{{ exp_sellogic.data_inizio|date:"M Y" }} — {% if exp_sellogic.data_fine %}{{ exp_sellogic.data_fine|date:"M Y" }}{% else %}presente{% endif %}</span>
+            </div>
+            <div class="experience-desc">{{ exp_sellogic.descrizione|linebreaksbr }}</div>
+            <div class="mt-3">
+                {% for tech in sellogic_tech %}<span class="badge badge-tech me-1 mb-1">{{ tech.nome }}</span>{% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+(function () {
+    const DATASET = [
+        { azione: "Progettazione e sviluppo", area: "Test Automation", tech: ["Cypress", "JavaScript"],
+          dettaglio: "framework di test automation E2E per la piattaforma gestionale Impronto Enterprise, costruito sul Page Object Model con base class condivisa e dati di test dinamici generati con Faker.js (15+ moduli coperti)", ordine: 0 },
+        { azione: "Progettazione e sviluppo", area: "Test Automation", tech: ["Python", "Playwright"],
+          dettaglio: "stack di automazione E2E complementare con Pytest e Page Object Model, fixture di autenticazione basate su sessione, astrazione BasePage per i pattern UI Vuetify e dati generati con Faker", ordine: 1 },
+        { azione: "Progettazione e sviluppo", area: "Mobile Testing", tech: ["TestNG", "Appium", "Java"],
+          dettaglio: "suite E2E per un'app Flutter enterprise in produzione, automatizzando flussi multi-schermata e risolvendo blocchi intermittenti di sessione del driver", ordine: 2 },
+        { azione: "Costruzione e ottimizzazione", area: "CI/CD", tech: ["GitLab CI/CD"],
+          dettaglio: "pipeline con stage install/lint/smoke/test su runner Docker, reporting a doppio formato (Mochawesome/JUnit XML, Allure) e commenti automatici sulle Merge Request", ordine: 3 },
+        { azione: "Diagnosi e risoluzione", area: "Test Automation", tech: ["Cypress"],
+          dettaglio: "crash del renderer Chrome in ambienti CI headless legati a componenti Vuetify (ResizeObserver/debounce), tramite intercept mirati e trigger di eventi DOM", ordine: 4 },
+        { azione: "Individuazione e documentazione", area: "Bug Hunting & Security", tech: [],
+          dettaglio: "oltre 50 bug, incluso un payload XSS critico cross-modulo sul sistema POS che eseguiva codice arbitrario sull'interfaccia kiosk", ordine: 5 }
+    ];
+    const ALL_TECH = ["Python", "Playwright", "TestNG", "Appium", "Java", "Cypress", "JavaScript", "GitLab CI/CD"];
+    window.__sim.runExperienceSim('sg', DATASET, ALL_TECH);
+})();
+</script>
+{% endif %}
+
+{% if exp_iliad %}
+<section class="mb-5">
+    <p class="eyebrow">// esperienza — Iliad</p>
+
+    <div class="hero-terminal">
+        <div class="row g-3 mb-3">
+            <div class="col-6">
+                <span class="field-label">Azione</span>
+                <div class="fake-select" id="il-azione">- Select an option -</div>
+            </div>
+            <div class="col-6">
+                <span class="field-label">Area</span>
+                <div class="fake-select" id="il-area">- Select an option -</div>
+            </div>
+        </div>
+
+        <div id="il-tech-row">
+            <span class="field-label">Tecnologie</span>
+            <div class="tech-pills" id="il-pills"></div>
+        </div>
+
+        <span class="field-label">Dettaglio</span>
+        <div class="fake-textarea" id="il-dettaglio"></div>
+
+        <div class="row g-3" style="max-width: 160px;">
+            <div class="col">
+                <span class="field-label">Ordine</span>
+                <div class="fake-input" id="il-ordine">0</div>
+            </div>
+        </div>
+
+        <div class="fake-btn mt-3" id="il-btn">Salva highlight</div>
+        <div class="status-line" id="il-status">&nbsp;</div>
+
+        <p class="sim-caption">simulazione del flusso Playwright che uso per popolare questi contenuti — non esecuzione live</p>
+    </div>
+
+    <div class="card project-card experience-card mt-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                <div>
+                    <h5 class="card-title mb-1">{{ exp_iliad.ruolo }}</h5>
+                    <span class="project-meta">{{ exp_iliad.azienda }}</span>
+                </div>
+                <span class="project-meta">{{ exp_iliad.data_inizio|date:"M Y" }} — {% if exp_iliad.data_fine %}{{ exp_iliad.data_fine|date:"M Y" }}{% else %}presente{% endif %}</span>
+            </div>
+            <div class="experience-desc">{{ exp_iliad.descrizione|linebreaksbr }}</div>
+            <div class="mt-3">
+                <span class="badge badge-soft me-1 mb-1">Problem solving</span>
+                <span class="badge badge-soft me-1 mb-1">Customer care</span>
+                <span class="badge badge-soft me-1 mb-1">Gestione stand</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+(function () {
+    const DATASET = [
+        { azione: "Diagnosi e risoluzione", area: "Altro", tech: [],
+          dettaglio: "gestione di stand promozionali, relazioni dirette con la clientela e risoluzione di problematiche hardware in contesti commerciali ad alto traffico, sviluppando capacità di problem solving tecnico sotto pressione", ordine: 0 }
+    ];
+    window.__sim.runExperienceSim('il', DATASET, []);
+})();
+</script>
+{% endif %}
+
+{% if progetto_principale %}
+<section class="mb-5">
+    <div class="card hero-project-card">
+        <div class="card-body">
+            <span class="featured-eyebrow">&#9733; progetto principale</span>
+            <div class="hero-project-grid">
+                <div class="hero-project-info">
+                    <h3 class="card-title mb-2">{{ progetto_principale.nome }}</h3>
+                    <p class="card-text">{{ progetto_principale.descrizione|truncatewords:55 }}</p>
+                    <div class="mb-3">
+                        {% for tech in progetto_principale.tecnologie.all %}
+                        <span class="badge badge-tech me-1">{{ tech.nome }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{% url 'core:project_detail' progetto_principale.slug %}" class="btn btn-outline-accent btn-sm">Dettagli</a>
+                        {% if progetto_principale.demo_url %}<a href="{{ progetto_principale.demo_url }}" target="_blank" class="btn btn-outline-light btn-sm">Demo</a>{% endif %}
+                        {% if progetto_principale.repo_url %}<a href="{{ progetto_principale.repo_url }}" target="_blank" class="btn btn-outline-secondary btn-sm">GitHub</a>{% endif %}
+                    </div>
+                </div>
+                <div class="hero-project-media">
+                    {% if principale_video %}
+                        {% if principale_video.type == 'video' %}
+                        <video class="hero-media-player" src="{{ principale_video.src }}" controls preload="metadata"></video>
+                        {% else %}
+                        <div class="hero-media-embed">
+                            <iframe src="{{ principale_video.src }}" title="Video dimostrativo — {{ progetto_principale.nome }}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                    <div class="hero-media-placeholder">
+                        <span>&#9654;</span>
+                        <p>anteprima gif/video in arrivo</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="mb-5">
+    <p class="eyebrow">// progetti</p>
+    <div class="row g-4">
+        {% for progetto in progetti %}
+        <div class="col-md-6">
+            <div class="card project-card h-100 {% if progetto.in_evidenza %}featured{% endif %}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ progetto.nome }}</h5>
+                        {% if progetto.in_evidenza %}<span class="badge badge-featured">in evidenza</span>{% endif %}
+                    </div>
+                    <p class="card-text">{{ progetto.descrizione|truncatewords:30 }}</p>
+                    <div class="mb-3">
+                        {% for tech in progetto.tecnologie.all %}
+                        <span class="badge badge-tech me-1">{{ tech.nome }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{% url 'core:project_detail' progetto.slug %}" class="btn btn-outline-accent btn-sm">Dettagli</a>
+                        {% if progetto.demo_url %}<a href="{{ progetto.demo_url }}" target="_blank" class="btn btn-outline-light btn-sm">Demo</a>{% endif %}
+                        {% if progetto.repo_url %}<a href="{{ progetto.repo_url }}" target="_blank" class="btn btn-outline-secondary btn-sm">GitHub</a>{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-5">
+    <p class="eyebrow">// skills</p>
+
+    {{ skills_by_category|json_script:"skills-data" }}
+
+    <div class="hero-terminal compact">
+        <div class="row g-3 mb-3">
+            <div class="col-12 col-sm-6">
+                <span class="field-label">Categoria</span>
+                <div class="fake-select" id="sk-categoria">- Select an option -</div>
+            </div>
+        </div>
+        <span class="field-label">Skill</span>
+        <div class="tech-pills" id="sk-pills"></div>
+    </div>
+</section>
+
+<script>
+(function () {
+    const S = window.__sim;
+    const DATA = JSON.parse(document.getElementById('skills-data').textContent);
+    const CATS = Object.keys(DATA);
+    const categoria = document.getElementById('sk-categoria'), pills = document.getElementById('sk-pills');
+
+    async function cycle() {
+        for (const cat of CATS) {
+            categoria.classList.remove('active');
+            categoria.textContent = '- Select an option -';
+            S.renderPills(pills, DATA[cat]);
+            await S.sleep(400);
+            await S.selectFake(categoria, cat);
+            await S.checkAllPills(pills, 110);
+            await S.sleep(1200);
+        }
+        await S.sleep(500);
+        cycle();
+    }
+    if (CATS.length) cycle();
+})();
+</script>
+
+{% endblock %}

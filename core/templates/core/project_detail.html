@@ -1,0 +1,158 @@
+{% extends "core/base.html" %}
+{% block content %}
+
+<a href="{% url 'core:home' %}" class="btn btn-outline-secondary btn-sm mb-4">&larr; torna ai progetti</a>
+
+<p class="eyebrow">// progetto</p>
+
+<div class="project-detail-top">
+    <div class="project-detail-main">
+        <h1 class="mb-3">{{ progetto.nome }}</h1>
+        <p class="project-description">{{ progetto.descrizione|linebreaksbr }}</p>
+
+        <div class="mb-4">
+            {% for tech in progetto.tecnologie.all %}
+            <span class="badge badge-tech me-1">{{ tech.nome }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+            {% if progetto.demo_url %}<a href="{{ progetto.demo_url }}" target="_blank" class="btn btn-outline-accent">Vedi demo</a>{% endif %}
+            {% if progetto.repo_url %}<a href="{{ progetto.repo_url }}" target="_blank" class="btn btn-outline-light">Vedi su GitHub</a>{% endif %}
+        </div>
+    </div>
+
+    <div class="project-detail-media">
+        {% if video_embed %}
+        <div class="report-window">
+            <div class="report-topbar">
+                <div class="report-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+                <span class="report-url">demo-video.mp4</span>
+            </div>
+            <div class="report-body report-body-video">
+                {% if video_embed.type == 'video' %}
+                <video class="video-demo-player" src="{{ video_embed.src }}" controls preload="metadata"></video>
+                {% else %}
+                <div class="video-embed-wrap">
+                    <iframe src="{{ video_embed.src }}" title="Video dimostrativo — {{ progetto.nome }}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% elif not report_types %}
+        <div class="media-placeholder">
+            <span>&#9654;</span>
+            <p>immagine o video dimostrativo in arrivo</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if report_types %}
+<p class="eyebrow">// report di esecuzione (simulazione)</p>
+<p class="report-intro">Così si presentano i report che genero a fine ciclo di test — qui ricostruiti a scopo dimostrativo, con dati di esempio coerenti con la suite reale.</p>
+{% endif %}
+
+{% if 'cypress' in report_types %}
+<div class="report-window mb-4">
+    <div class="report-topbar">
+        <div class="report-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="report-url">file:///reports/cypress/mochawesome.html</span>
+    </div>
+    <div class="report-body report-body-mocha">
+        <div class="mocha-header">
+            <span class="mocha-logo">&#9670; Mochawesome Report</span>
+            <span class="mocha-date">Sellogic E2E Suite — Cypress</span>
+        </div>
+        <div class="mocha-stats">
+            <div class="mocha-stat"><span class="mocha-stat-num mocha-pass">13</span><span class="mocha-stat-label">passing</span></div>
+            <div class="mocha-stat"><span class="mocha-stat-num mocha-pending">1</span><span class="mocha-stat-label">pending</span></div>
+            <div class="mocha-stat"><span class="mocha-stat-num mocha-fail">0</span><span class="mocha-stat-label">failing</span></div>
+            <div class="mocha-stat"><span class="mocha-stat-num">2m 14s</span><span class="mocha-stat-label">duration</span></div>
+        </div>
+        <ul class="mocha-suite-list">
+            <li class="mocha-suite"><span class="mocha-check">&#10003;</span> Fatturazione &mdash; Fatture Emesse, Documenti Emessi, Nuovo Documento, Scadenziario <span class="mocha-count">4/4</span></li>
+            <li class="mocha-suite"><span class="mocha-check">&#10003;</span> Vendite &mdash; Scontrini, Gestione Ordini, Panoramica, Prodotti, Temporale, Operatori &amp; Sale, Commerciale <span class="mocha-count">7/7</span></li>
+            <li class="mocha-suite"><span class="mocha-check">&#10003;</span> Catalogo &mdash; Tabacchi <span class="mocha-count">2/2</span></li>
+            <li class="mocha-suite mocha-suite-pending"><span class="mocha-dash">&#9679;</span> Catalogo &mdash; Gratta e Vinci <span class="mocha-count">in corso</span></li>
+        </ul>
+    </div>
+</div>
+{% endif %}
+
+{% if 'playwright' in report_types %}
+<div class="report-window mb-4">
+    <div class="report-topbar">
+        <div class="report-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="report-url">file:///reports/playwright/index.html</span>
+    </div>
+    <div class="report-body report-body-pw">
+        <div class="pw-header">
+            <span class="pw-logo">&#9654; Playwright Test Report</span>
+            <span class="pw-date">Sellogic E2E Suite — Python</span>
+        </div>
+        <div class="pw-tabs">
+            <span class="pw-tab pw-tab-active">Tutti 16</span>
+            <span class="pw-tab pw-tab-pass">Passati 14</span>
+            <span class="pw-tab pw-tab-skip">Saltati 2</span>
+            <span class="pw-tab pw-tab-fail">Falliti 0</span>
+        </div>
+        <ul class="pw-spec-list">
+            <li class="pw-spec"><span class="pw-dot pw-dot-pass"></span> email-marketing / segmenti.spec.py <span class="pw-count">3 passed</span></li>
+            <li class="pw-spec"><span class="pw-dot pw-dot-pass"></span> email-marketing / campagne-marketing.spec.py <span class="pw-count">3 passed</span></li>
+            <li class="pw-spec"><span class="pw-dot pw-dot-pass"></span> fidelity / carte-fidelity.spec.py <span class="pw-count">3 passed</span></li>
+            <li class="pw-spec"><span class="pw-dot pw-dot-skip"></span> fidelity / campagne.spec.py <span class="pw-count">2 skipped &mdash; bug backend noto</span></li>
+            <li class="pw-spec"><span class="pw-dot pw-dot-pass"></span> campi-personalizzati / campi.spec.py <span class="pw-count">5 passed</span></li>
+            <li class="pw-spec"><span class="pw-dot pw-dot-skip"></span> tabacchi-ddt / ddt-fornitore.spec.py <span class="pw-count">1 skipped &mdash; prerequisito mancante</span></li>
+        </ul>
+        <div class="pw-junit">
+            <span class="pw-junit-label">junit.xml</span>
+            <pre class="pw-junit-code">&lt;testsuite name="playwright-sellogic" tests="16" failures="0" skipped="2" time="94.812"&gt;
+    &lt;testcase classname="fidelity" name="carte_fidelity_barcode_univoco" time="6.203" /&gt;
+    &lt;testcase classname="email_marketing" name="segmenti_creazione" time="4.917" /&gt;
+    &lt;testcase classname="fidelity" name="campagne_salvataggio"&gt;
+        &lt;skipped message="bug backend confermato su save" /&gt;
+    &lt;/testcase&gt;
+&lt;/testsuite&gt;</pre>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if 'appium' in report_types %}
+<div class="report-window mb-4">
+    <div class="report-topbar">
+        <div class="report-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="report-url">file:///allure-report/index.html</span>
+    </div>
+    <div class="report-body report-body-allure">
+        <div class="allure-header">
+            <span class="allure-logo">Allure Report</span>
+            <span class="allure-date">waiter_ui — Appium / TestNG</span>
+        </div>
+        <div class="allure-widgets">
+            <div class="allure-widget">
+                <span class="allure-widget-title">Suites</span>
+                <span class="allure-widget-num">5</span>
+            </div>
+            <div class="allure-widget">
+                <span class="allure-widget-title">Test passati</span>
+                <span class="allure-widget-num allure-pass">18/20</span>
+            </div>
+            <div class="allure-widget">
+                <span class="allure-widget-title">Durata totale</span>
+                <span class="allure-widget-num">4m 02s</span>
+            </div>
+        </div>
+        <ul class="allure-suite-list">
+            <li class="allure-suite"><span class="allure-check allure-check-pass">&#10003;</span> Login &amp; Accesso <span class="allure-count">3/3</span></li>
+            <li class="allure-suite"><span class="allure-check allure-check-pass">&#10003;</span> Gestione Tavoli <span class="allure-count">5/5</span></li>
+            <li class="allure-suite"><span class="allure-check allure-check-pass">&#10003;</span> Invio Ordine in Cucina <span class="allure-count">4/4</span></li>
+            <li class="allure-suite"><span class="allure-check allure-check-pass">&#10003;</span> Modifica Ordine <span class="allure-count">4/4</span></li>
+            <li class="allure-suite"><span class="allure-check allure-check-retry">&#8635;</span> Accessibilità (TalkBack) <span class="allure-count">2/4 &mdash; retry su blocco sessione driver</span></li>
+        </ul>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
