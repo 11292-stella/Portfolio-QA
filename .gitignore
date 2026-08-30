@@ -3,6 +3,9 @@ __pycache__/
 *.pyc
 db.sqlite3
 staticfiles/
-media/
+
 .env
+.env.local
 *.dist-info/
+node_modules/
+.neon/
