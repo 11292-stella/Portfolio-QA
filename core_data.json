@@ -1,0 +1,403 @@
+[
+{
+  "model": "core.skill",
+  "pk": 1,
+  "fields": {
+    "nome": "Python",
+    "categoria": "linguaggio",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 2,
+  "fields": {
+    "nome": "Playwright",
+    "categoria": "framework",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 3,
+  "fields": {
+    "nome": "TestNG",
+    "categoria": "framework",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 4,
+  "fields": {
+    "nome": "Appium",
+    "categoria": "framework",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 5,
+  "fields": {
+    "nome": "Java",
+    "categoria": "linguaggio",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 6,
+  "fields": {
+    "nome": "Django",
+    "categoria": "framework",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 7,
+  "fields": {
+    "nome": "GitLab CI/CD",
+    "categoria": "ci_cd",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 8,
+  "fields": {
+    "nome": "Cypress",
+    "categoria": "framework",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 9,
+  "fields": {
+    "nome": "JavaScript",
+    "categoria": "linguaggio",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 10,
+  "fields": {
+    "nome": "PostgreSQL",
+    "categoria": "database",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 11,
+  "fields": {
+    "nome": "Neon",
+    "categoria": "database",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 12,
+  "fields": {
+    "nome": "Gmail API",
+    "categoria": "altro",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 13,
+  "fields": {
+    "nome": "BeautifulSoup",
+    "categoria": "altro",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 14,
+  "fields": {
+    "nome": "Faker.js",
+    "categoria": "altro",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 15,
+  "fields": {
+    "nome": "React",
+    "categoria": "framework",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 16,
+  "fields": {
+    "nome": "HTML5",
+    "categoria": "altro",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 17,
+  "fields": {
+    "nome": "CSS3",
+    "categoria": "altro",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.skill",
+  "pk": 18,
+  "fields": {
+    "nome": "Flutter",
+    "categoria": "framework",
+    "frequenza": 0
+  }
+},
+{
+  "model": "core.project",
+  "pk": 1,
+  "fields": {
+    "nome": "Job Aggregator",
+    "slug": "job-aggregator",
+    "descrizione": "Sistema Python/Django per centralizzare la ricerca lavoro: integra l'API REST Adzuna e la Gmail API (OAuth2) per leggere le newsletter di\r\nalert LinkedIn e Indeed, con parsing HTML via BeautifulSoup delle email (sorgente non strutturata e soggetta a cambi di layout). Gli annunci\r\nvengono deduplicati, classificati e filtrati con un motore a regole basato su keyword matching (nessuna dipendenza da LLM, per costo zero e\r\noutput prevedibile), geolocalizzati sull'area Toscana e salvati su PostgreSQL (Neon) con notifiche email automatiche per gruppo di rilevanza.\r\nInclude una dashboard Django con filtri e paginazione per la consultazione",
+    "repo_url": "https://github.com/11292-stella/job-aggregator",
+    "demo_url": "https://job-aggregator-oldg.onrender.com",
+    "video_demo_url": null,
+    "video_file": "project_videos/1mK1GFg_-_Imgur.mp4",
+    "stelle_github": 0,
+    "ultimo_commit": "2026-08-26T07:50:18Z",
+    "in_evidenza": true,
+    "progetto_principale": false,
+    "data_creazione": "2026-08-27T07:50:36.162Z",
+    "tecnologie": [
+      1,
+      6,
+      10,
+      11,
+      12,
+      13
+    ]
+  }
+},
+{
+  "model": "core.project",
+  "pk": 2,
+  "fields": {
+    "nome": "Cypress E2E Restaurant Management",
+    "slug": "cypress-e2e-restaurant-management",
+    "descrizione": "Suite di test E2E indipendente per una piattaforma SaaS di gestione ristorativa (Vue.js/Vuetify): architettura Page Object Model, dati dinamici\r\ncon Faker.js e pipeline CI/CD su GitLab.",
+    "repo_url": "https://github.com/11292-stella/cypress-e2e-restaurant-management",
+    "demo_url": null,
+    "video_demo_url": null,
+    "video_file": "",
+    "stelle_github": 0,
+    "ultimo_commit": "2026-08-27T07:53:24Z",
+    "in_evidenza": true,
+    "progetto_principale": false,
+    "data_creazione": "2026-08-27T07:53:26.456Z",
+    "tecnologie": [
+      7,
+      8,
+      9,
+      14
+    ]
+  }
+},
+{
+  "model": "core.project",
+  "pk": 3,
+  "fields": {
+    "nome": "Appium Mobile Test Automation",
+    "slug": "appium-mobile-test-automation",
+    "descrizione": "Framework di test automatizzati, sviluppato da zero in autoformazione, per un'app mobile Flutter di gestione sala/ristorante (Page Object\r\nModel).",
+    "repo_url": "https://github.com/11292-stella/appium-mobile-test-automation",
+    "demo_url": null,
+    "video_demo_url": null,
+    "video_file": "",
+    "stelle_github": 0,
+    "ultimo_commit": "2026-08-26T07:54:26Z",
+    "in_evidenza": true,
+    "progetto_principale": false,
+    "data_creazione": "2026-08-27T07:54:28.865Z",
+    "tecnologie": [
+      3,
+      4,
+      5
+    ]
+  }
+},
+{
+  "model": "core.project",
+  "pk": 4,
+  "fields": {
+    "nome": "Playwright Test Automation",
+    "slug": "playwright-test-automation",
+    "descrizione": "Suite di test end-to-end in Playwright (Python, Page Object Model) per il modulo \"Gestione Catene\", nata dalla migrazione di test suite Cypress instabili afflitte da crash ricorrenti del renderer. Copre 7 suite di test con helper riutilizzabili per interazioni complesse (dropdown multi-selezione in modali) e attese a livello di rete tramite expect_response() invece di attese temporali fisse, per test più stabili e veloci.",
+    "repo_url": "https://github.com/11292-stella/Playwright-Test-Automation",
+    "demo_url": null,
+    "video_demo_url": null,
+    "video_file": "",
+    "stelle_github": 0,
+    "ultimo_commit": null,
+    "in_evidenza": true,
+    "progetto_principale": false,
+    "data_creazione": "2026-08-27T07:57:51.714Z",
+    "tecnologie": [
+      1,
+      2,
+      14
+    ]
+  }
+},
+{
+  "model": "core.project",
+  "pk": 7,
+  "fields": {
+    "nome": "Portfolio full stack developer",
+    "slug": "portfolio-full-stack-developer",
+    "descrizione": "Applicazione web interattiva sviluppata per presentare i miei progetti, competenze tech e background formativo/professionale nell'ambito dello sviluppo Web & Full Stack. La piattaforma offre un'esperienza utente moderna e reattiva, integra sezioni dedicate alle tecnologie utilizzate, progetti principali e form/contatti dinamici.",
+    "repo_url": "https://github.com/11292-stella/portfolio-stella",
+    "demo_url": "https://portfolio-stella-lyart.vercel.app/home",
+    "video_demo_url": null,
+    "video_file": "project_videos/owXmFof_-_Imgur.mp4",
+    "stelle_github": 0,
+    "ultimo_commit": "2026-08-28T14:45:45Z",
+    "in_evidenza": true,
+    "progetto_principale": true,
+    "data_creazione": "2026-08-28T14:45:53.074Z",
+    "tecnologie": [
+      15,
+      16,
+      17
+    ]
+  }
+},
+{
+  "model": "core.experience",
+  "pk": 1,
+  "fields": {
+    "ruolo": "QA Automation Engineer & Functional Analyst",
+    "azienda": "Sellogic S.r.l. · Collazzone (PG)",
+    "data_inizio": "2025-12-01",
+    "data_fine": null,
+    "descrizione": "• Progettazione e sviluppo autonomo, da zero, di un framework di test automation E2E in Cypress (JavaScript) per la piattaforma gestionale\r\nImpronto Enterprise, costruito sul Page Object Model con una base class condivisa, alias API verificati tramite intercept e dati di test\r\ndinamici generati con Faker.js — a copertura di 15+ moduli (Catalogo Prodotti, Fatturazione, Tavoli & Sale, Operatori, Impostazioni Locale,\r\nMenù Composti, Magazzino, Clienti e altro).\r\n• Progettazione e sviluppo in autoformazione, parallelamente alle attività quotidiane, di un secondo stack di automazione E2E\r\ncomplementare con Playwright e Python (Pytest, Page Object Model) sulla stessa piattaforma: fixture di autenticazione basate su sessione,\r\nun'astrazione BasePage per i pattern UI specifici di Vuetify (dropdown, drawer, loader) e dati di test generati con Faker — incluso il debug\r\ndi root cause su click intercettati e casi limite di accessible name nell'applicazione sotto test.\r\n• Estensione dell'automazione al mobile: progettazione di una suite E2E Appium (Java, TestNG, Page Object Model) per un'app Flutter \r\nenterprise in produzione, automatizzando flussi multi-schermata (apertura tavolo, selezione prodotto, gestione varianti, invio ordine) e\r\nrisolvendo blocchi intermittenti di sessione del driver in esecuzioni continuative.\r\n• Costruzione, ottimizzazione e manutenzione di una pipeline GitLab CI/CD (stage install fi lint fi smoke fi test) su runner Docker, con\r\nworkflow rules per evitare pipeline duplicate, linting automatico, reporting a doppio formato (Mochawesome/JUnit XML, esteso ad Allure\r\nper Playwright) e commenti automatici sulle Merge Request con il riepilogo dei risultati dei test.\r\n• Progettazione di una strategia dedicata di smoke test cross-suite per validare i rilasci multilingua (EN/DE e altre) su decine di moduli,\r\nindividuando regressioni funzionali senza duplicare la copertura funzionale già esistente.\r\n• Diagnosi e risoluzione di crash del renderer Chrome in ambienti CI headless legati a componenti Vuetify (ResizeObserver/debounce sui\r\ncampi autocomplete) tramite intercept mirati e trigger di eventi DOM.\r\n• Studio e implementazione autonoma di configurazioni YAML avanzate per GitLab CI/CD, gestione dei branch protetti e variabili\r\nd'ambiente sicure, oltre all'esplorazione in parallelo di ambienti cloud (AWS) tramite risorse di apprendimento online.\r\n• Individuazione e documentazione di oltre 50 bug, incluso un payload XSS critico cross-modulo sul sistema POS che eseguiva codice\r\narbitrario sull'interfaccia kiosk rivolta al cliente.\r\n• Redazione di oltre 25 report di test strutturati con passi di riproduzione dettagliati, log del dispositivo raccolti via ADB/logcat e ipotesi\r\nprecise di root cause backend/frontend.\r\n• Audit indipendente di 19 articoli della Knowledge Base interna, con ristrutturazione di workflow obsoleti e correzione di URL non\r\nfunzionanti"
+  }
+},
+{
+  "model": "core.experience",
+  "pk": 2,
+  "fields": {
+    "ruolo": "Brand Ambassador",
+    "azienda": "Iliad · Figline e Incisa Valdarno (FI)",
+    "data_inizio": "2024-10-01",
+    "data_fine": "2024-12-01",
+    "descrizione": "• Gestione di stand promozionali, relazioni dirette con la clientela e risoluzione di problematiche hardware in contesti commerciali ad alto\r\ntraffico, sviluppando capacità di problem solving tecnico sotto pressione."
+  }
+},
+{
+  "model": "core.experiencehighlight",
+  "pk": 10,
+  "fields": {
+    "experience": 2,
+    "azione": "diagnosi",
+    "area": "altro",
+    "dettaglio": "Gestione di stand promozionali, relazioni dirette con la clientela e risoluzione di problematiche hardware in contesti commerciali ad alto traffico, sviluppando capacità di problem solving tecnico sotto pressione.",
+    "ordine": 0,
+    "tecnologie": []
+  }
+},
+{
+  "model": "core.experiencehighlight",
+  "pk": 19,
+  "fields": {
+    "experience": 1,
+    "azione": "progettazione",
+    "area": "automation",
+    "dettaglio": "framework di test automation E2E per la piattaforma gestionale Impronto Enterprise, costruito sul Page Object Model con base class condivisa e dati di test dinamici generati con Faker.js (15+ moduli coperti)",
+    "ordine": 0,
+    "tecnologie": [
+      8,
+      9
+    ]
+  }
+},
+{
+  "model": "core.experiencehighlight",
+  "pk": 20,
+  "fields": {
+    "experience": 1,
+    "azione": "progettazione",
+    "area": "automation",
+    "dettaglio": "stack di automazione E2E complementare con Pytest e Page Object Model, fixture di autenticazione basate su sessione, astrazione BasePage per i pattern UI Vuetify e dati generati con Faker",
+    "ordine": 1,
+    "tecnologie": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "core.experiencehighlight",
+  "pk": 21,
+  "fields": {
+    "experience": 1,
+    "azione": "progettazione",
+    "area": "mobile",
+    "dettaglio": "suite E2E per un'app Flutter enterprise in produzione, automatizzando flussi multi-schermata e risolvendo blocchi intermittenti di sessione del driver",
+    "ordine": 2,
+    "tecnologie": [
+      3,
+      4,
+      5
+    ]
+  }
+},
+{
+  "model": "core.experiencehighlight",
+  "pk": 22,
+  "fields": {
+    "experience": 1,
+    "azione": "costruzione",
+    "area": "ci_cd",
+    "dettaglio": "pipeline con stage install/lint/smoke/test su runner Docker, reporting a doppio formato (Mochawesome/JUnit XML, Allure) e commenti automatici sulle Merge Request",
+    "ordine": 3,
+    "tecnologie": [
+      7
+    ]
+  }
+},
+{
+  "model": "core.experiencehighlight",
+  "pk": 23,
+  "fields": {
+    "experience": 1,
+    "azione": "diagnosi",
+    "area": "automation",
+    "dettaglio": "crash del renderer Chrome in ambienti CI headless legati a componenti Vuetify (ResizeObserver/debounce), tramite intercept mirati e trigger di eventi DOM",
+    "ordine": 4,
+    "tecnologie": [
+      8
+    ]
+  }
+},
+{
+  "model": "core.experiencehighlight",
+  "pk": 24,
+  "fields": {
+    "experience": 1,
+    "azione": "individuazione",
+    "area": "bug_hunting",
+    "dettaglio": "oltre 50 bug, incluso un payload XSS critico cross-modulo sul sistema POS che eseguiva codice arbitrario sull'interfaccia kiosk",
+    "ordine": 5,
+    "tecnologie": []
+  }
+}
+]
