@@ -441,4 +441,151 @@ window.__sim = (function () {
 })();
 </script>
 
+<section class="mb-5">
+    <p class="eyebrow">// formazione &amp; certificazioni</p>
+
+    {% if formazione_sim %}
+    {{ formazione_sim|json_script:"formazione-sim-data" }}
+
+    <div class="hero-terminal compact">
+        <div class="row g-3 mb-3">
+            <div class="col-6">
+                <span class="field-label">Istituto</span>
+                <div class="fake-select" id="fm-istituto">- Select an option -</div>
+            </div>
+            <div class="col-6">
+                <span class="field-label">Periodo</span>
+                <div class="fake-select" id="fm-periodo">- Select an option -</div>
+            </div>
+        </div>
+
+        <span class="field-label">Titolo</span>
+        <div class="fake-select" id="fm-titolo">- Select an option -</div>
+
+        <span class="field-label clear-photo">Dettaglio</span>
+        <div class="fake-textarea" id="fm-dettaglio"></div>
+
+        <div id="fm-tech-row">
+            <span class="field-label">Tecnologie</span>
+            <div class="tech-pills" id="fm-pills"></div>
+        </div>
+
+        <div class="fake-btn mt-3" id="fm-btn">Salva formazione</div>
+        <div class="status-line" id="fm-status">&nbsp;</div>
+    </div>
+
+    <script>
+    (function () {
+        const S = window.__sim;
+        const DATA = JSON.parse(document.getElementById('formazione-sim-data').textContent);
+        if (!DATA.length) return;
+        const el = id => document.getElementById('fm-' + id);
+        const istituto = el('istituto'), periodo = el('periodo'), titolo = el('titolo'),
+              dettaglio = el('dettaglio'), pillsRow = el('tech-row'), pills = el('pills'),
+              btn = el('btn'), status = el('status');
+
+        async function resetForm(techList) {
+            istituto.textContent = '- Select an option -'; istituto.classList.remove('active');
+            periodo.textContent = '- Select an option -'; periodo.classList.remove('active');
+            titolo.textContent = '- Select an option -'; titolo.classList.remove('active');
+            dettaglio.innerHTML = ''; dettaglio.classList.remove('active');
+            if (techList.length) { pillsRow.style.display = ''; S.renderPills(pills, techList); }
+            else { pillsRow.style.display = 'none'; }
+            btn.classList.remove('saved');
+            status.innerHTML = '&nbsp;';
+            await S.sleep(500);
+        }
+
+        async function cycle() {
+            for (const item of DATA) {
+                await resetForm(item.tech || []);
+                await S.selectFake(istituto, item.istituto);
+                await S.selectFake(periodo, item.periodo);
+                await S.selectFake(titolo, item.titolo);
+                await S.typeText(dettaglio, item.dettaglio, 14);
+                if (item.tech && item.tech.length) await S.checkAllPills(pills, 130);
+                await S.sleep(300);
+                btn.classList.add('saved');
+                status.innerHTML = '<span class="ok">&#10003;</span> formazione salvata';
+                await S.sleep(1600);
+            }
+            await S.sleep(700);
+            cycle();
+        }
+        cycle();
+    })();
+    </script>
+    {% endif %}
+
+    <div class="row g-4 mt-1">
+        {% for formazione in formazioni %}
+        <div class="col-12">
+            <div class="card project-card education-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                        <h5 class="card-title mb-0">
+                            {{ formazione.titolo }} —
+                            {% if formazione.istituto_url %}
+                            <a href="{{ formazione.istituto_url }}" target="_blank" class="education-istituto text-decoration-none">{{ formazione.istituto }}</a>
+                            {% else %}
+                            <span class="education-istituto">{{ formazione.istituto }}</span>
+                            {% endif %}
+                        </h5>
+                        <span class="education-periodo">{{ formazione.periodo_label }}</span>
+                    </div>
+                    <ul class="education-bullets">
+                        {% for h in formazione.highlights.all %}
+                        <li>
+                            {{ h.testo }}
+                            {% for tech in h.tecnologie.all %}
+                            <span class="badge badge-tech me-1">{{ tech.nome }}</span>
+                            {% endfor %}
+                            {% if h.certificazione %}
+                            <br><span class="badge badge-cert mt-1">{{ h.certificazione }}</span>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-5" id="contatti">
+    <p class="eyebrow">// contatti</p>
+
+    <div class="card project-card contact-card">
+        <div class="card-body">
+            <h5 class="card-title mb-1">Sentiamoci qui</h5>
+            <p class="card-text mb-4">Hai una posizione aperta o un progetto in mente? Scrivimi due righe, ti rispondo appena posso.</p>
+
+            <form method="post" action="{% url 'core:contact_create' %}" novalidate>
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ contact_form.nome.id_for_label }}">nome</label>
+                        {{ contact_form.nome }}
+                        {% for error in contact_form.nome.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="{{ contact_form.email.id_for_label }}">email</label>
+                        {{ contact_form.email }}
+                        {% for error in contact_form.email.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="{{ contact_form.messaggio.id_for_label }}">messaggio</label>
+                        {{ contact_form.messaggio }}
+                        {% for error in contact_form.messaggio.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-outline-accent btn-sm mt-3">Invia messaggio</button>
+            </form>
+
+            <p class="contact-alt mt-3 mb-0">oppure scrivimi direttamente a <a href="mailto:stella.marucelli@gmail.com">stella.marucelli@gmail.com</a></p>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

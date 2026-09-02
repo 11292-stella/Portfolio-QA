@@ -1276,3 +1276,119 @@ footer {
         gap: 1.5rem;
     }
 }
+/* Site-wide Django messages */
+.site-message {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background-color: rgba(255, 255, 255, 0.02);
+    color: var(--text-muted);
+}
+
+.site-message-success {
+    border-color: rgba(52, 211, 153, 0.4);
+    background-color: rgba(52, 211, 153, 0.08);
+    color: var(--accent-green);
+}
+
+.site-message-error {
+    border-color: rgba(248, 113, 113, 0.4);
+    background-color: rgba(248, 113, 113, 0.08);
+    color: #f87171;
+}
+
+/* Formazione & Certificazioni */
+.education-card {
+    border-left: 3px solid var(--accent-green);
+}
+
+.education-card .card-title {
+    font-size: 1rem;
+}
+
+.education-istituto {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.education-periodo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+}
+
+.education-bullets {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.education-bullets li {
+    margin-bottom: 0.6rem;
+}
+
+.education-bullets li:last-child {
+    margin-bottom: 0;
+}
+
+.badge-cert {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    background-color: var(--accent-glow);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    display: inline-block;
+    margin-top: 0.35rem;
+}
+
+/* Contatti */
+.contact-card {
+    border-left: 3px solid var(--accent-blue);
+}
+
+.contact-card .form-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    text-transform: lowercase;
+    margin-bottom: 0.3rem;
+}
+
+.contact-card .form-control {
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+}
+
+.contact-card .form-control:focus {
+    background-color: var(--bg);
+    color: var(--text);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+}
+
+.contact-card .form-control::placeholder {
+    color: var(--text-dim);
+}
+
+.contact-alt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+.contact-alt a {
+    color: var(--accent-blue);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(56, 189, 248, 0.4);
+}
+
+.contact-alt a:hover {
+    color: var(--accent);
+}

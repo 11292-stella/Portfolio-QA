@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Field, Submit
-from .models import ExperienceHighlight
+from .models import ExperienceHighlight, ContactMessage
 
 
 class ExperienceHighlightForm(forms.ModelForm):
@@ -26,3 +26,24 @@ class ExperienceHighlightForm(forms.ModelForm):
             'dettaglio',
             Column('ordine', css_class='col-md-3'),
         )
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = ContactMessage
+        fields = ['nome', 'email', 'messaggio']
+        widgets = {
+            'nome': forms.TextInput(attrs={
+                'class': 'form-control', 'placeholder': 'Come ti chiami?'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control', 'placeholder': 'la-tua-email@esempio.com'
+            }),
+            'messaggio': forms.Textarea(attrs={
+                'class': 'form-control', 'rows': 4, 'placeholder': 'Raccontami del ruolo o del progetto...'
+            }),
+        }
+        labels = {
+            'nome': 'Nome',
+            'email': 'Email',
+            'messaggio': 'Messaggio',
+        }

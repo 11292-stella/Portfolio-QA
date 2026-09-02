@@ -16,6 +16,15 @@
     </nav>
 
     <main class="container py-5">
+        {% if messages %}
+        <div class="site-messages mb-4">
+            {% for message in messages %}
+            <div class="site-message {% if message.tags %}site-message-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         {% block content %}{% endblock %}
     </main>
 

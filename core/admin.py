@@ -1,7 +1,10 @@
 from django.contrib import admin
 
 from django.contrib import admin
-from .models import Skill, Project, Experience, ExperienceHighlight
+from .models import (
+    Skill, Project, Experience, ExperienceHighlight,
+    Formazione, FormazioneHighlight, ContactMessage,
+)
 
 
 @admin.register(Skill)
@@ -30,3 +33,26 @@ class ExperienceHighlightInline(admin.TabularInline):
 class ExperienceAdmin(admin.ModelAdmin):
     list_display = ('ruolo', 'azienda', 'data_inizio', 'data_fine')
     inlines = [ExperienceHighlightInline]
+
+
+class FormazioneHighlightInline(admin.TabularInline):
+    model = FormazioneHighlight
+    extra = 1
+    filter_horizontal = ('tecnologie',)
+
+
+@admin.register(Formazione)
+class FormazioneAdmin(admin.ModelAdmin):
+    list_display = ('titolo', 'istituto', 'periodo_label', 'ordine')
+    list_editable = ('ordine',)
+    search_fields = ('titolo', 'istituto')
+    inlines = [FormazioneHighlightInline]
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'email', 'creato_il', 'letto')
+    list_filter = ('letto',)
+    list_editable = ('letto',)
+    search_fields = ('nome', 'email', 'messaggio')
+    readonly_fields = ('nome', 'email', 'messaggio', 'creato_il')

@@ -1,11 +1,12 @@
 import re
 
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
 from .models import Project, Skill, Experience
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
-from .models import Project, Skill, Experience, ExperienceHighlight
-from .forms import ExperienceHighlightForm
+from .models import Project, Skill, Experience, ExperienceHighlight, Formazione
+from .forms import ExperienceHighlightForm, ContactForm
 
 
 def build_video_embed(progetto):
@@ -41,7 +42,7 @@ def build_video_embed(progetto):
     return {'type': 'iframe', 'src': url}
 
 
-def home(request):
+def _build_home_context(contact_form=None):
     progetto_principale = Project.objects.filter(progetto_principale=True).first()
     progetti = Project.objects.exclude(pk=getattr(progetto_principale, 'pk', None)).order_by('-in_evidenza', '-data_creazione')
     skills = Skill.objects.all().order_by('categoria', 'nome')
@@ -61,7 +62,22 @@ def home(request):
 
     principale_video = build_video_embed(progetto_principale)
 
-    context = {
+    formazioni = Formazione.objects.prefetch_related('highlights__tecnologie').order_by('ordine')
+
+    formazione_sim = []
+    for f in formazioni:
+        primo_highlight = f.highlights.all().first() if hasattr(f, 'highlights') else None
+        if not primo_highlight:
+            continue
+        formazione_sim.append({
+            'titolo': f.titolo,
+            'istituto': f.istituto,
+            'periodo': f.periodo_label,
+            'dettaglio': primo_highlight.testo,
+            'tech': [t.nome for t in primo_highlight.tecnologie.all()],
+        })
+
+    return {
         'progetto_principale': progetto_principale,
         'principale_video': principale_video,
         'progetti': progetti,
@@ -69,8 +85,29 @@ def home(request):
         'exp_sellogic': exp_sellogic,
         'exp_iliad': exp_iliad,
         'sellogic_tech': sellogic_tech,
+        'formazioni': formazioni,
+        'formazione_sim': formazione_sim,
+        'contact_form': contact_form if contact_form is not None else ContactForm(),
     }
+
+
+def home(request):
+    context = _build_home_context()
     return render(request, 'core/home.html', context)
+
+
+def contact_create(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Messaggio inviato! Ti risponderò il prima possibile.")
+            return redirect('/#contatti')
+        else:
+            messages.error(request, "Controlla i campi evidenziati qui sotto.")
+            context = _build_home_context(contact_form=form)
+            return render(request, 'core/home.html', context)
+    return redirect('/#contatti')
 
 
 def project_detail(request, slug):

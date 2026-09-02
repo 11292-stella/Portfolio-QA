@@ -106,4 +106,57 @@ class ExperienceHighlight(models.Model):
     def __str__(self):
         return self.frase_generata()[:80]
 
+
+class Formazione(models.Model):
+    titolo = models.CharField(max_length=200, help_text="Es: Master Full Stack Developer")
+    istituto = models.CharField(max_length=200, help_text="Es: Epicode")
+    istituto_url = models.URLField(blank=True, null=True, help_text="Link al sito dell'istituto (opzionale)")
+    periodo_label = models.CharField(
+        max_length=100,
+        help_text="Testo libero mostrato in alto a destra. Es: '2025', '2009 — 2011', 'Corso di Formazione'"
+    )
+    ordine = models.PositiveIntegerField(default=0, help_text="Ordine di visualizzazione (0 = primo)")
+
+    class Meta:
+        ordering = ['ordine']
+        verbose_name = "Formazione / Certificazione"
+        verbose_name_plural = "Formazione & Certificazioni"
+
+    def __str__(self):
+        return f"{self.titolo} — {self.istituto}"
+
+
+class FormazioneHighlight(models.Model):
+    formazione = models.ForeignKey(Formazione, on_delete=models.CASCADE, related_name='highlights')
+    testo = models.CharField(
+        max_length=300,
+        help_text="Es: 'Percorso intensivo di programmazione incentrato su' — le tecnologie selezionate sotto verranno aggiunte come tag alla fine della frase."
+    )
+    tecnologie = models.ManyToManyField(Skill, blank=True, related_name='formazioni_highlights')
+    certificazione = models.CharField(
+        max_length=200, blank=True,
+        help_text="Se compilato, viene mostrato come badge esteso a sé stante (es. 'Epicode Talent - Full Stack Developer'), utile per bullet tipo 'Conseguita certificazione ufficiale'."
+    )
+    ordine = models.PositiveIntegerField(default=0, help_text="Ordine di visualizzazione (0 = primo)")
+
+    class Meta:
+        ordering = ['ordine']
+
+    def __str__(self):
+        return self.testo[:80]
+
+
+class ContactMessage(models.Model):
+    nome = models.CharField(max_length=150)
+    email = models.EmailField()
+    messaggio = models.TextField()
+    creato_il = models.DateTimeField(auto_now_add=True)
+    letto = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-creato_il']
+
+    def __str__(self):
+        return f"{self.nome} <{self.email}> — {self.creato_il:%d/%m/%Y %H:%M}"
+
     # per rimigrare dopo cambiamento: python manage.py makemigrations  python manage.py migrate  python manage.py runserver
