@@ -12,7 +12,12 @@
 
     <nav class="navbar px-4">
         <a class="navbar-brand" href="{% url 'core:home' %}">Stella Marucelli</a>
-        <span class="role-tag">qa_automation_engineer</span>
+        <div class="d-flex align-items-center gap-2">
+            <span class="role-tag d-none d-sm-inline-block">QA Automation Engineer & Full Stack Developer</span>
+            <a href="{% static 'core/cv/Stella_Marucelli_CV.pdf' %}" class="btn btn-outline-accent btn-sm" download="Stella_Marucelli_CV.pdf">
+                Scarica CV
+            </a>
+        </div>
     </nav>
 
     <main class="container py-5">

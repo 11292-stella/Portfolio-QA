@@ -22,6 +22,7 @@
     /* Accents */
     --accent: #a78bfa;           /* Purple accent */
     --accent-glow: rgba(167, 139, 250, 0.15);
+    --accent-bright: #c4b5fd;    /* Viola acceso per elementi in evidenza (nome, ruolo) */
     --accent-warm: #f97316;      /* Vibrant Orange */
     --accent-blue: #38bdf8;      /* Electric Cyan/Blue */
     --accent-green: #34d399;     /* Emerald Green */
@@ -105,18 +106,26 @@ a:hover {
 }
 
 .navbar-brand {
-    color: var(--text) !important;
+    color: var(--accent-bright) !important;
     font-size: 1.25rem;
+    font-weight: 700;
+    text-shadow: 0 0 12px rgba(196, 181, 253, 0.5);
+    transition: text-shadow 0.2s ease;
+}
+
+.navbar-brand:hover {
+    text-shadow: 0 0 18px rgba(196, 181, 253, 0.75);
 }
 
 .navbar .role-tag {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.8rem;
-    color: var(--accent);
+    color: var(--accent-bright);
     background: var(--accent-glow);
     padding: 0.2rem 0.6rem;
     border-radius: 4px;
-    border: 1px solid rgba(167, 139, 250, 0.3);
+    border: 1px solid rgba(196, 181, 253, 0.4);
+    text-shadow: 0 0 10px rgba(196, 181, 253, 0.6);
 }
 
 /* --- Hero & Experience Interactive Terminal --- */

@@ -160,3 +160,4 @@ class ContactMessage(models.Model):
         return f"{self.nome} <{self.email}> — {self.creato_il:%d/%m/%Y %H:%M}"
 
     # per rimigrare dopo cambiamento: python manage.py makemigrations  python manage.py migrate  python manage.py runserver
+    # per ativare modifiche: python manage.py collectstatic --noinput
