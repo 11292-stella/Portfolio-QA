@@ -161,3 +161,4 @@ class ContactMessage(models.Model):
 
     # per rimigrare dopo cambiamento: python manage.py makemigrations  python manage.py migrate  python manage.py runserver
     # per ativare modifiche: python manage.py collectstatic --noinput
+    # per accedere al db deploiato: 127.0.0.1:8000/admin
