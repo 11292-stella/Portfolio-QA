@@ -5,9 +5,15 @@
 <script>
 /* Helper condivisi da tutte le simulazioni della pagina */
 window.__sim = (function () {
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    /* "Salta animazioni": se attivo (o se l'utente preferisce meno animazioni)
+       i form si compilano all'istante e i cicli si fermano sul primo elemento. */
+    let skipped = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const isSkipped = () => skipped;
+    const skip = () => { skipped = true; };
+    const sleep = ms => skipped ? Promise.resolve() : new Promise(r => setTimeout(r, ms));
 
     async function typeText(node, text, speed = 14) {
+        if (skipped) { node.classList.add('active'); node.textContent = text; return; }
         node.classList.add('active');
         node.innerHTML = '<span class="typed"></span><span class="cursor-blink"></span>';
         const typed = node.querySelector('.typed');
@@ -61,8 +67,8 @@ window.__sim = (function () {
         else { renderPills(pills, ALL_TECH); }
 
         async function resetForm() {
-            azione.textContent = '- Select an option -'; azione.classList.remove('active');
-            area.textContent = '- Select an option -'; area.classList.remove('active');
+            azione.textContent = '- Seleziona -'; azione.classList.remove('active');
+            area.textContent = '- Seleziona -'; area.classList.remove('active');
             dettaglio.innerHTML = ''; dettaglio.classList.remove('active');
             ordine.textContent = '0';
             if (ALL_TECH.length) renderPills(pills, ALL_TECH);
@@ -82,6 +88,7 @@ window.__sim = (function () {
                 await sleep(300);
                 btn.classList.add('saved');
                 status.innerHTML = '<span class="ok">&#10003;</span> highlight salvato';
+                if (skipped) return;
                 await sleep(1400);
             }
             await sleep(700);
@@ -90,7 +97,16 @@ window.__sim = (function () {
         cycle();
     }
 
-    return { sleep, typeText, selectFake, fillUpload, renderPills, checkPill, checkAllPills, runExperienceSim };
+    return { sleep, isSkipped, skip, typeText, selectFake, fillUpload, renderPills, checkPill, checkAllPills, runExperienceSim };
+})();
+</script>
+
+<button type="button" class="skip-anim-btn" id="skip-anim">&#9193; Salta animazioni</button>
+<script>
+(function () {
+    const b = document.getElementById('skip-anim');
+    if (window.__sim.isSkipped()) { b.hidden = true; return; }
+    b.addEventListener('click', () => { window.__sim.skip(); b.hidden = true; });
 })();
 </script>
 
@@ -108,11 +124,11 @@ window.__sim = (function () {
         <div class="row g-3 mb-3">
             <div class="col-6">
                 <span class="field-label">Ruolo</span>
-                <div class="fake-select" id="ps-ruolo">- Select an option -</div>
+                <div class="fake-select" id="ps-ruolo">- Seleziona -</div>
             </div>
             <div class="col-6">
                 <span class="field-label">Disponibilità</span>
-                <div class="fake-select" id="ps-disp">- Select an option -</div>
+                <div class="fake-select" id="ps-disp">- Seleziona -</div>
             </div>
         </div>
 
@@ -139,13 +155,13 @@ window.__sim = (function () {
     const OBIETTIVO = `Aperta a collaborazioni sia in Partita IVA sia come dipendente (Full Remote o con disponibilità al trasferimento). Cerco opportunità come QA Automation Engineer, Full Stack Developer o in ruoli ibridi, dove mettere a disposizione la progettazione autonoma di framework E2E multi-stack, il debug di codice frontend/backend e lo sviluppo software.`;
     const TECH = [
   // QA & Automation
-  "Cypress", "Playwright", "Appium", "Python", "Pytest", "Postman",
+  "Cypress", "Playwright", "Appium", "Robot Framework", "xUnit", "Python", "Pytest", "Postman",
   // DevOps & CI/CD
   "GitLab CI/CD", "Docker",
   // Frontend & Mobile
-  "React", "Redux", "Flutter", "JavaScript", "HTML5/CSS3",
+  "Angular", "TypeScript", "React", "Redux", "Flutter", "JavaScript", "HTML5/CSS3",
   // Backend & DB
-  "Django", "Java", "Spring Boot", "PostgreSQL", "REST API"
+  "C#", "ASP.NET Core", "Django", "Java", "Spring Boot", "PostgreSQL", "REST API"
 ];
 
     const el = id => document.getElementById(id);
@@ -154,8 +170,8 @@ window.__sim = (function () {
           status = el('ps-status');
 
     async function resetForm() {
-        ruolo.textContent = '- Select an option -'; ruolo.classList.remove('active');
-        disp.textContent = '- Select an option -'; disp.classList.remove('active');
+        ruolo.textContent = '- Seleziona -'; ruolo.classList.remove('active');
+        disp.textContent = '- Seleziona -'; disp.classList.remove('active');
         foto.classList.remove('active');
         bio.innerHTML = ''; bio.classList.remove('active');
         obiettivo.innerHTML = ''; obiettivo.classList.remove('active');
@@ -166,7 +182,7 @@ window.__sim = (function () {
     }
 
     async function runCycle() {
-        while (true) {
+        {
             await resetForm();
             await S.selectFake(ruolo, RUOLO);
             await S.selectFake(disp, DISP);
@@ -177,7 +193,6 @@ window.__sim = (function () {
             await S.sleep(300);
             btn.classList.add('saved');
             status.innerHTML = '<span class="ok">&#10003;</span> presentazione salvata';
-            await S.sleep(3500);
         }
     }
 
@@ -194,11 +209,11 @@ window.__sim = (function () {
         <div class="row g-3 mb-3">
             <div class="col-6">
                 <span class="field-label">Azione</span>
-                <div class="fake-select" id="sg-azione">- Select an option -</div>
+                <div class="fake-select" id="sg-azione">- Seleziona -</div>
             </div>
             <div class="col-6">
                 <span class="field-label">Area</span>
-                <div class="fake-select" id="sg-area">- Select an option -</div>
+                <div class="fake-select" id="sg-area">- Seleziona -</div>
             </div>
         </div>
 
@@ -244,7 +259,7 @@ window.__sim = (function () {
 (function () {
     const DATASET = [
         { azione: "Progettazione e sviluppo", area: "Test Automation", tech: ["Cypress", "JavaScript"],
-          dettaglio: "framework di test automation E2E per la piattaforma gestionale Impronto Enterprise, costruito sul Page Object Model con base class condivisa e dati di test dinamici generati con Faker.js (15+ moduli coperti)", ordine: 0 },
+          dettaglio: "framework di test automation E2E per una piattaforma gestionale web per la ristorazione, costruito sul Page Object Model con base class condivisa e dati di test dinamici generati con Faker.js (15+ moduli coperti)", ordine: 0 },
         { azione: "Progettazione e sviluppo", area: "Test Automation", tech: ["Python", "Playwright"],
           dettaglio: "stack di automazione E2E complementare con Pytest e Page Object Model, fixture di autenticazione basate su sessione, astrazione BasePage per i pattern UI Vuetify e dati generati con Faker", ordine: 1 },
         { azione: "Progettazione e sviluppo", area: "Mobile Testing", tech: ["TestNG", "Appium", "Java"],
@@ -270,11 +285,11 @@ window.__sim = (function () {
         <div class="row g-3 mb-3">
             <div class="col-6">
                 <span class="field-label">Azione</span>
-                <div class="fake-select" id="il-azione">- Select an option -</div>
+                <div class="fake-select" id="il-azione">- Seleziona -</div>
             </div>
             <div class="col-6">
                 <span class="field-label">Area</span>
-                <div class="fake-select" id="il-area">- Select an option -</div>
+                <div class="fake-select" id="il-area">- Seleziona -</div>
             </div>
         </div>
 
@@ -409,11 +424,20 @@ window.__sim = (function () {
         <div class="row g-3 mb-3">
             <div class="col-12 col-sm-6">
                 <span class="field-label">Categoria</span>
-                <div class="fake-select" id="sk-categoria">- Select an option -</div>
+                <div class="fake-select" id="sk-categoria">- Seleziona -</div>
             </div>
         </div>
         <span class="field-label">Skill</span>
         <div class="tech-pills" id="sk-pills"></div>
+    </div>
+
+    <div class="skills-static mt-4">
+        {% for categoria, nomi in skills_by_category.items %}
+        <div class="skills-static-group">
+            <span class="field-label">{{ categoria }}</span>
+            <div>{% for nome in nomi %}<span class="badge badge-tech me-1 mb-1">{{ nome }}</span>{% endfor %}</div>
+        </div>
+        {% endfor %}
     </div>
 </section>
 
@@ -427,11 +451,12 @@ window.__sim = (function () {
     async function cycle() {
         for (const cat of CATS) {
             categoria.classList.remove('active');
-            categoria.textContent = '- Select an option -';
+            categoria.textContent = '- Seleziona -';
             S.renderPills(pills, DATA[cat]);
             await S.sleep(400);
             await S.selectFake(categoria, cat);
             await S.checkAllPills(pills, 110);
+            if (S.isSkipped()) return;
             await S.sleep(1200);
         }
         await S.sleep(500);
@@ -451,16 +476,16 @@ window.__sim = (function () {
         <div class="row g-3 mb-3">
             <div class="col-6">
                 <span class="field-label">Istituto</span>
-                <div class="fake-select" id="fm-istituto">- Select an option -</div>
+                <div class="fake-select" id="fm-istituto">- Seleziona -</div>
             </div>
             <div class="col-6">
                 <span class="field-label">Periodo</span>
-                <div class="fake-select" id="fm-periodo">- Select an option -</div>
+                <div class="fake-select" id="fm-periodo">- Seleziona -</div>
             </div>
         </div>
 
         <span class="field-label">Titolo</span>
-        <div class="fake-select" id="fm-titolo">- Select an option -</div>
+        <div class="fake-select" id="fm-titolo">- Seleziona -</div>
 
         <span class="field-label clear-photo">Dettaglio</span>
         <div class="fake-textarea" id="fm-dettaglio"></div>
@@ -485,9 +510,9 @@ window.__sim = (function () {
               btn = el('btn'), status = el('status');
 
         async function resetForm(techList) {
-            istituto.textContent = '- Select an option -'; istituto.classList.remove('active');
-            periodo.textContent = '- Select an option -'; periodo.classList.remove('active');
-            titolo.textContent = '- Select an option -'; titolo.classList.remove('active');
+            istituto.textContent = '- Seleziona -'; istituto.classList.remove('active');
+            periodo.textContent = '- Seleziona -'; periodo.classList.remove('active');
+            titolo.textContent = '- Seleziona -'; titolo.classList.remove('active');
             dettaglio.innerHTML = ''; dettaglio.classList.remove('active');
             if (techList.length) { pillsRow.style.display = ''; S.renderPills(pills, techList); }
             else { pillsRow.style.display = 'none'; }
@@ -507,6 +532,7 @@ window.__sim = (function () {
                 await S.sleep(300);
                 btn.classList.add('saved');
                 status.innerHTML = '<span class="ok">&#10003;</span> formazione salvata';
+                if (S.isSkipped()) return;
                 await S.sleep(1600);
             }
             await S.sleep(700);

@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Stella Marucelli — QA Automation{% endblock %}</title>
+    <meta name="description" content="Stella Marucelli — QA Automation Engineer &amp; Full Stack Developer. Test automation con Playwright, Cypress, Appium e Robot Framework, pipeline CI/CD, sviluppo .NET, Angular e Flutter.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Stella Marucelli — QA Automation Engineer &amp; Full Stack Developer">
+    <meta property="og:description" content="Portfolio: suite di test E2E e API, pipeline CI/CD e progetti full stack.">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'core/img/io-disegno.png' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'core/style.css' %}" rel="stylesheet">
 </head>
@@ -13,8 +19,11 @@
     <nav class="navbar px-4">
         <a class="navbar-brand" href="{% url 'core:home' %}">Stella Marucelli</a>
         <div class="d-flex align-items-center gap-2">
-            <span class="role-tag d-none d-sm-inline-block">QA Automation Engineer & Full Stack Developer</span>
-            <a href="{% static 'core/cv/Stella_Marucelli_CV_v2.pdf' %}" class="btn btn-outline-accent btn-sm" download="Stella_Marucelli_CV.pdf">
+            <span class="role-tag d-none d-lg-inline-block">QA Automation Engineer & Full Stack Developer</span>
+            <a href="https://github.com/11292-stella" target="_blank" rel="noopener" class="nav-link-plain">GitHub</a>
+            <a href="https://www.linkedin.com/in/stella-marucelli/" target="_blank" rel="noopener" class="nav-link-plain">LinkedIn</a>
+            <a href="{% url 'core:home' %}#contatti" class="nav-link-plain">Contatti</a>
+            <a href="{% static 'core/cv/Stella_Marucelli_CV_v3.pdf' %}" class="btn btn-outline-accent btn-sm" download="Stella_Marucelli_CV.pdf">
                 Scarica CV 
             </a>
         </div>
