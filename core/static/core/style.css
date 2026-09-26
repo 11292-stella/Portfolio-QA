@@ -1508,3 +1508,20 @@ footer {
 .metodo-list { color: var(--text-muted); font-size: .92rem; padding-left: 1.1rem; margin: 0; }
 .metodo-list li { margin-bottom: .35rem; }
 .metodo-list b { color: var(--text); }
+
+/* --- Banner "metodo" in home --- */
+.metodo-banner {
+    display: grid; gap: .75rem; text-decoration: none; color: var(--text);
+    padding: 2.25rem 2rem; border-radius: 14px; border: 1px solid var(--accent);
+    background: linear-gradient(135deg, rgba(167, 139, 250, .16) 0%, var(--surface) 55%, rgba(249, 115, 22, .08) 100%);
+    box-shadow: var(--shadow-glow); transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
+}
+.metodo-banner:hover, .metodo-banner:focus-visible { transform: translateY(-3px); border-color: var(--accent-warm); box-shadow: 0 0 28px rgba(249, 115, 22, .22); color: var(--text); outline: none; }
+.metodo-banner-eyebrow { font-family: 'JetBrains Mono', monospace; color: var(--accent-green); font-size: .85rem; }
+.metodo-banner-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.15; letter-spacing: -.02em; text-wrap: balance; }
+.metodo-banner-text { color: var(--text-muted); max-width: 70ch; }
+.metodo-banner-points { display: flex; flex-wrap: wrap; gap: .5rem; }
+.metodo-banner-points span { font-family: 'JetBrains Mono', monospace; font-size: .8rem; background: var(--bg); border: 1px solid var(--border-bright); border-radius: 8px; padding: .35rem .7rem; color: var(--text-muted); }
+.metodo-banner-cta { justify-self: start; margin-top: .25rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--bg); background: var(--accent); padding: .6rem 1.1rem; border-radius: 999px; transition: background var(--transition-fast); }
+.metodo-banner:hover .metodo-banner-cta { background: var(--accent-warm); }
+@media (max-width: 575px) { .metodo-banner { padding: 1.5rem 1.2rem; } }

@@ -30,3 +30,17 @@ def test_indice_porta_alle_sezioni(page: Page, live_server):
     expect(page).to_have_url(re.compile(r"#progress$"))
     expect(page.locator("#progress pre")).to_contain_text("## ✅ Fatto")
     expect(page.locator("#ai")).to_contain_text("Il test decide")
+
+
+def test_banner_in_home_porta_al_metodo(page: Page, live_server, dati_portfolio):
+    page.goto(live_server.url + "/")
+    banner = page.locator("#metodo-banner")
+    expect(banner).to_contain_text("Esplora il mio metodo di lavoro")
+    # il banner sta subito dopo il progetto principale, prima della lista progetti
+    posizioni = page.evaluate("""() => {
+        const y = sel => document.querySelector(sel).getBoundingClientRect().top;
+        return [y('.hero-project-card'), y('#metodo-banner'), y('.project-card:not(.hero-project-card)')];
+    }""")
+    assert posizioni[0] < posizioni[1]
+    banner.get_by_text("Scopri il metodo").click()
+    expect(page).to_have_url(re.compile(r"/metodo/$"))

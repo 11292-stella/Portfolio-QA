@@ -198,6 +198,21 @@
 </section>
 {% endif %}
 
+<section class="mb-5" id="metodo-banner">
+    <a href="{% url 'core:metodo' %}" class="metodo-banner">
+        <span class="metodo-banner-eyebrow">// come lavoro</span>
+        <span class="metodo-banner-title">Esplora il mio metodo di lavoro</span>
+        <span class="metodo-banner-text">Come testavo e documentavo ogni modulo in azienda, con report d'esempio nello stesso formato, il file <code>PROGRESS.md</code> e come uso l'AI senza rinunciare alla qualità.</span>
+        <span class="metodo-banner-points">
+            <span>&#128203; Report per ogni modulo</span>
+            <span>&#128202; Riepiloghi con priorità</span>
+            <span>&#128221; PROGRESS.md</span>
+            <span>&#129302; AI con revisione</span>
+        </span>
+        <span class="metodo-banner-cta">Scopri il metodo &rarr;</span>
+    </a>
+</section>
+
 <section class="mb-5">
     <p class="eyebrow">// progetti</p>
     <div class="row g-4">
@@ -321,17 +336,6 @@
             </div>
         </div>
         {% endfor %}
-    </div>
-</section>
-
-<section class="mb-5" id="metodo-teaser">
-    <p class="eyebrow">// come lavoro</p>
-    <div class="card project-card featured">
-        <div class="card-body">
-            <h5 class="card-title mb-2">Report, tracciamento e uso dell'AI</h5>
-            <p class="card-text mb-3">Il flusso QA che seguivo in azienda, due report d'esempio nello stesso formato, il mio file <code>PROGRESS.md</code> e come uso Claude Code e Cursor senza rinunciare alla qualità.</p>
-            <a href="{% url 'core:metodo' %}" class="btn btn-outline-accent btn-sm">Scopri il metodo</a>
-        </div>
     </div>
 </section>
 
