@@ -42,6 +42,28 @@ def build_video_embed(progetto):
     return {'type': 'iframe', 'src': url}
 
 
+def build_experience_sim(experience):
+    """Dati per la simulazione animata di un'esperienza, presi dagli highlight nel database."""
+    if not experience:
+        return {'dataset': [], 'all_tech': []}
+    highlights = experience.highlights.prefetch_related('tecnologie').order_by('ordine')
+    dataset = []
+    all_tech = []
+    for h in highlights:
+        tech = [t.nome for t in h.tecnologie.all()]
+        for nome in tech:
+            if nome not in all_tech:
+                all_tech.append(nome)
+        dataset.append({
+            'azione': h.get_azione_display(),
+            'area': h.get_area_display(),
+            'tech': tech,
+            'dettaglio': h.dettaglio,
+            'ordine': h.ordine,
+        })
+    return {'dataset': dataset, 'all_tech': all_tech}
+
+
 def _build_home_context(contact_form=None):
     progetto_principale = Project.objects.filter(progetto_principale=True).first()
     progetti = Project.objects.exclude(pk=getattr(progetto_principale, 'pk', None)).order_by('-in_evidenza', '-data_creazione')
@@ -85,6 +107,8 @@ def _build_home_context(contact_form=None):
         'exp_sellogic': exp_sellogic,
         'exp_iliad': exp_iliad,
         'sellogic_tech': sellogic_tech,
+        'sellogic_sim': build_experience_sim(exp_sellogic),
+        'iliad_sim': build_experience_sim(exp_iliad),
         'formazioni': formazioni,
         'formazione_sim': formazione_sim,
         'contact_form': contact_form if contact_form is not None else ContactForm(),

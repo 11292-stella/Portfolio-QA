@@ -3,7 +3,7 @@ HIGHLIGHTS_SELLOGIC = [
         "azione": "Progettazione e sviluppo",
         "area": "Test Automation",
         "tecnologie": ["Cypress", "JavaScript"],
-        "dettaglio": "framework di test automation E2E per la piattaforma gestionale Impronto Enterprise, costruito sul Page Object Model con base class condivisa e dati di test dinamici generati con Faker.js (15+ moduli coperti)",
+        "dettaglio": "framework di test automation E2E per una piattaforma gestionale web per la ristorazione, costruito sul Page Object Model con base class condivisa e dati di test dinamici generati con Faker.js (15+ moduli coperti)",
         "ordine": 0,
     },
     {

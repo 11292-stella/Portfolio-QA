@@ -1,7 +1,6 @@
-databases:
-  - name: qa-portfolio-db
-    plan: free
-
+# Configurazione Render (Blueprint).
+# Il database è Postgres su Neon: DATABASE_URL va impostata a mano nelle
+# Environment variables di Render (sync: false = non viene sovrascritta).
 services:
   - type: web
     name: qa-portfolio
@@ -11,9 +10,7 @@ services:
     startCommand: "gunicorn qa_portfolio.wsgi:application"
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: qa-portfolio-db
-          property: connectionString
+        sync: false
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
