@@ -1,0 +1,247 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Metodo QA — Stella Marucelli{% endblock %}
+{% block content %}
+
+<section class="mb-5 metodo-hero">
+    <p class="eyebrow">// come lavoro</p>
+    <h1 class="metodo-title">Report, tracciamento e AI: il mio metodo QA</h1>
+    <p class="metodo-lead">
+        Nei colloqui mi chiedono spesso <em>come</em> lavoro, non solo con quali strumenti.
+        Qui trovi il flusso che ho seguito in azienda, due report d'esempio nello stesso formato
+        che usavo, il file di avanzamento con cui tengo traccia dei progetti e il modo in cui uso l'AI.
+    </p>
+    <div class="metodo-stats">
+        <span><b>25+</b> report QA consegnati al team</span>
+        <span><b>8</b> audit della Knowledge Base, per 4 tipi di utente</span>
+        <span><b>1</b> report per ogni modulo esaminato</span>
+    </div>
+    <nav class="metodo-toc" aria-label="Sezioni della pagina">
+        <a href="#flusso">Flusso di lavoro</a>
+        <a href="#report">Report case</a>
+        <a href="#progress">PROGRESS.md</a>
+        <a href="#ai">Uso dell'AI</a>
+    </nav>
+</section>
+
+<!-- ============================ FLUSSO ============================ -->
+<section class="mb-5" id="flusso">
+    <p class="eyebrow">// flusso di lavoro</p>
+    <ol class="metodo-steps">
+        <li>
+            <h3>Esplorazione del modulo</h3>
+            <p>Uso il modulo come farebbe l'utente finale, con i DevTools aperti: chiamate di rete, errori in console, dati salvati davvero.</p>
+        </li>
+        <li>
+            <h3>Diario di bordo per modulo</h3>
+            <p>Per ogni modulo scrivo un report: ogni osservazione ha un'etichetta (<span class="tag tag-bug">BUG</span> <span class="tag tag-ux">UX</span> <span class="tag tag-proposta">PROPOSTA</span> <span class="tag tag-verifica">DA VERIFICARE</span> <span class="tag tag-positivo">POSITIVO</span>), comportamento atteso, comportamento attuale ed eventuale workaround.</p>
+        </li>
+        <li>
+            <h3>Report consolidato con priorità</h3>
+            <p>Per test più ampi (stress test, flussi end-to-end tra più app) apro con un riepilogo esecutivo: area, stato e priorità, così il team sa subito da dove partire.</p>
+        </li>
+        <li>
+            <h3>Documentazione per chi usa il software</h3>
+            <p>Audit della Knowledge Base per audience (admin ristoratore, operatore, installatore, distributore): ogni articolo verificato sull'interfaccia reale, linguaggio semplificato, rimandi corretti.</p>
+        </li>
+        <li>
+            <h3>Automazione dei flussi stabili</h3>
+            <p>Quello che è stabile diventa test automatico (Cypress, Playwright, Appium) in pipeline. I bug noti restano tracciati nei report dei test, non nascosti.</p>
+        </li>
+        <li>
+            <h3>Verifica dei fix e regressione</h3>
+            <p>A ogni rilascio ricontrollo la lista dei fix pubblicati dagli sviluppatori e riapro quello che non è risolto.</p>
+        </li>
+    </ol>
+</section>
+
+<!-- ============================ REPORT CASE ============================ -->
+<section class="mb-5" id="report">
+    <p class="eyebrow">// report case</p>
+    <p class="metodo-note">
+        I report aziendali sono riservati, quindi qui sotto trovi due esempi <strong>nello stesso formato</strong>,
+        scritti sul mio progetto personale <a href="https://github.com/11292-stella/restaurant-management-system" target="_blank" rel="noopener">Restaurant Management System</a>.
+        Le osservazioni sono reali.
+    </p>
+
+    <!-- Report 1: diario di bordo -->
+    <article class="report-doc" id="report-diario">
+        <header class="report-doc-head">
+            <h2>Feedback e test d'uso — Ordini &amp; Scontrini</h2>
+            <p>Diario di bordo · Flusso kiosk → gestionale · Pagamento · Statistiche</p>
+        </header>
+
+        <p class="report-context"><strong>Contesto del test:</strong> ho seguito l'intero flusso, dall'ordine creato sul kiosk con note personalizzate fino all'emissione dello scontrino nel gestionale e alla pagina statistiche.</p>
+
+        <h3 class="report-area">1. Sincronizzazione kiosk → gestionale</h3>
+        <div class="report-item">
+            <div class="report-item-head"><span>ORDINE VISIBILE SUBITO NEL GESTIONALE</span><span class="tag tag-positivo">POSITIVO</span></div>
+            <p>L'ordine confermato sul kiosk compare subito nella lista ordini con cliente, totale e note per prodotto. Il totale è calcolato dal backend e coincide con il riepilogo del kiosk.</p>
+        </div>
+
+        <h3 class="report-area">2. Stato dell'ordine dopo il pagamento</h3>
+        <div class="report-item">
+            <div class="report-item-head"><span>L'ORDINE RESTA "IN ATTESA" DOPO LO SCONTRINO</span><span class="tag tag-verifica">DA VERIFICARE</span></div>
+            <p>Dopo l'emissione dello scontrino con carta, il dettaglio mostra correttamente "Scontrino emesso", ma lo stato dell'ordine resta "In attesa".</p>
+            <ul class="report-facts">
+                <li><b>Comportamento atteso:</b> ordine pagato → stato aggiornato (o almeno un'indicazione "pagato" nella lista ordini).</li>
+                <li><b>Comportamento attuale:</b> nella lista ordini non si distingue un ordine pagato da uno non pagato.</li>
+                <li><b>Da chiarire:</b> pagamento e stato di preparazione sono volutamente indipendenti?</li>
+            </ul>
+        </div>
+
+        <h3 class="report-area">3. Statistiche e food cost</h3>
+        <div class="report-item">
+            <div class="report-item-head"><span>MARGINE AL 100% CON COSTO DI PRODUZIONE A ZERO</span><span class="tag tag-ux">UX</span></div>
+            <p>I prodotti del menu base hanno costo di produzione €0,00: le statistiche mostrano food cost 0% e margine pari al ricavo, un dato che può trarre in inganno.</p>
+        </div>
+        <div class="report-item">
+            <div class="report-item-head"><span>SEGNALARE I PRODOTTI SENZA COSTO</span><span class="tag tag-proposta">PROPOSTA</span></div>
+            <ul class="report-facts">
+                <li><b>Soluzione:</b> badge "costo mancante" nella lista prodotti ed esclusione di quei prodotti dal food cost medio, con una nota.</li>
+                <li><b>Beneficio:</b> il ristoratore vede subito quali dati completare prima di fidarsi dei margini.</li>
+            </ul>
+        </div>
+
+        <h3 class="report-area">4. Sicurezza e integrità dei dati</h3>
+        <div class="report-item">
+            <div class="report-item-head"><span>REGISTRAZIONE COME ADMIN DAL CLIENT</span><span class="tag tag-bug">BUG</span></div>
+            <p>L'endpoint di registrazione accetta il campo <code>role</code> inviato dal client: chiunque può registrarsi come ADMIN. Trovato e riprodotto con un test API automatico.</p>
+        </div>
+        <div class="report-item">
+            <div class="report-item-head"><span>CANCELLAZIONE A CASCATA SENZA AVVISO</span><span class="tag tag-bug">BUG</span></div>
+            <p>Eliminando una categoria vengono eliminati anche tutti i prodotti collegati, senza conferma. Proposta: bloccare l'eliminazione se la categoria contiene prodotti, oppure chiedere conferma mostrando quanti prodotti verranno rimossi.</p>
+        </div>
+
+        <footer class="report-legend">
+            Legenda: <span class="tag tag-bug">BUG</span> <span class="tag tag-ux">UX</span> <span class="tag tag-proposta">PROPOSTA</span> <span class="tag tag-verifica">DA VERIFICARE</span> <span class="tag tag-positivo">POSITIVO</span>
+        </footer>
+    </article>
+
+    <!-- Report 2: riepilogo esecutivo -->
+    <article class="report-doc" id="report-esecutivo">
+        <header class="report-doc-head report-doc-head-dark">
+            <h2>Report QA — API &amp; pipeline CI</h2>
+            <p>Test API automatici (xUnit + Playwright .NET) su backend dockerizzato con database usa e getta</p>
+        </header>
+
+        <h3 class="report-area">Riepilogo esecutivo</h3>
+        <div class="table-wrap">
+            <table class="report-table">
+                <thead><tr><th>#</th><th>Area</th><th>Stato</th><th>Priorità</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Autenticazione / registrazione</td><td>Ruolo accettato dal client</td><td class="prio-critica">Critica</td></tr>
+                    <tr><td>2</td><td>Categorie → prodotti</td><td>Cascade delete silenzioso</td><td class="prio-alta">Alta</td></tr>
+                    <tr><td>3</td><td>Test in CI</td><td>Falliti per dipendenza dai dati → risolto</td><td class="prio-media">Media</td></tr>
+                    <tr><td>4</td><td>Esecuzione parallela</td><td>Race condition sull'utente di test → risolto</td><td class="prio-media">Media</td></tr>
+                    <tr><td>5</td><td>Ordini, scontrini, prodotti</td><td>Nessuna anomalia</td><td class="prio-bassa">—</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="report-area">Indicatori della suite</h3>
+        <div class="table-wrap">
+            <table class="report-table">
+                <thead><tr><th>Indicatore</th><th>Stato</th></tr></thead>
+                <tbody>
+                    <tr><td>Test API (5 aree)</td><td class="ok">✓ 42/42 superati</td></tr>
+                    <tr><td>Esecuzione in pipeline GitLab CI</td><td class="ok">✓ Verde, ~12 s</td></tr>
+                    <tr><td>Indipendenza dai dati</td><td class="ok">✓ Ogni test crea i propri dati</td></tr>
+                    <tr><td>Accesso senza token (401)</td><td class="ok">✓ Verificato su ogni area</td></tr>
+                    <tr><td>Validazione ruoli in registrazione</td><td class="ko">✗ Vulnerabilità aperta</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="report-callout">
+            <span class="report-callout-label">Come ci sono arrivata</span>
+            <p>In locale i test passavano sempre, in CI fallivano in modo casuale. Leggendo il body delle risposte invece del solo status code ho trovato due cause: test che davano per scontati dati già presenti nel database e classi di test eseguite in parallelo sullo stesso utente.</p>
+        </div>
+    </article>
+</section>
+
+<!-- ============================ PROGRESS ============================ -->
+<section class="mb-5" id="progress">
+    <p class="eyebrow">// progress.md</p>
+    <p class="metodo-note">
+        Per ogni progetto tengo un file <code>PROGRESS.md</code> aggiornato a fine sessione: cosa è fatto, cosa è in corso,
+        cosa resta da fare e perché ho preso certe decisioni. Serve a me, a chi entra nel progetto e anche all'AI,
+        che riparte dal punto giusto senza rispiegare tutto.
+    </p>
+    <div class="hero-terminal progress-file">
+<pre><span class="md-h"># PROGRESS — Restaurant Management System</span>
+
+<span class="md-h">## ✅ Fatto</span>
+- Backend ASP.NET Core: auth JWT, prodotti, categorie, ordini, scontrini
+- Gestionale Angular + kiosk Flutter collegati allo stesso backend
+- 42 test API (xUnit + Playwright .NET) → <span class="md-ok">42/42 verdi</span>
+- Pipeline GitLab CI: backend + Postgres usa e getta, report JUnit
+
+<span class="md-h">## 🔄 In corso</span>
+- [ ] E2E del gestionale con Robot Framework
+      - [x] login
+      - [x] lista prodotti, ricerca, filtro categoria
+      - [ ] ordini: cambio stato, scontrino contanti/carta
+
+<span class="md-h">## 📋 Da fare</span>
+- [ ] Job E2E in pipeline
+- [ ] E2E del kiosk con Appium
+- [ ] Costo di produzione nel seed (food cost realistico in demo)
+
+<span class="md-h">## 🐞 Bug aperti</span>
+- <span class="md-bug">[CRITICA]</span> registrazione accetta il ruolo dal client
+- <span class="md-bug">[ALTA]</span>    cascade delete categoria → prodotti
+
+<span class="md-h">## 🧭 Decisioni</span>
+- E2E in Robot Framework: Playwright e Cypress li uso già in altri progetti
+- Postgres in Docker in CI, non il database cloud: isolato e ripetibile
+- Test sequenziali: evitano race condition sull'utente di test</pre>
+    </div>
+</section>
+
+<!-- ============================ AI ============================ -->
+<section class="mb-5" id="ai">
+    <p class="eyebrow">// come lavoro con l'ai</p>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card project-card h-100"><div class="card-body">
+                <h5 class="card-title">Strumenti e usi</h5>
+                <p class="card-text mb-2">Claude (Claude Code), Cursor, GitHub Copilot. Li uso ogni giorno per:</p>
+                <ul class="metodo-list">
+                    <li>bozze di page object, test e fixture</li>
+                    <li>refactoring e migrazioni, come Cypress → Playwright</li>
+                    <li>debug: log, HTML della pagina, errori di pipeline</li>
+                    <li>documentazione, README e report</li>
+                </ul>
+            </div></div>
+        </div>
+        <div class="col-md-6">
+            <div class="card project-card h-100"><div class="card-body">
+                <h5 class="card-title">Il mio metodo</h5>
+                <ul class="metodo-list">
+                    <li><b>Contesto reale:</b> do all'AI l'HTML salvato della pagina, i file esistenti, gli errori completi.</li>
+                    <li><b>Continuità:</b> il <code>PROGRESS.md</code> fa ripartire ogni sessione dal punto giusto.</li>
+                    <li><b>Revisione di ogni riga:</b> sui test l'AI sbaglia spesso con locator fragili, attese fisse, asserzioni deboli e test verdi per il motivo sbagliato.</li>
+                    <li><b>Il test decide:</b> il codice generato vale solo se passa una suite che capisco.</li>
+                </ul>
+            </div></div>
+        </div>
+        <div class="col-12">
+            <div class="card project-card featured"><div class="card-body">
+                <h5 class="card-title">Un esempio vero</h5>
+                <p class="card-text mb-0">
+                    Nel progetto .NET alcuni test API generati passavano in locale e fallivano in CI.
+                    Leggendo il body degli errori ho capito che davano per scontati dati già presenti nel database,
+                    che nel Postgres usa e getta della pipeline non c'erano. Li ho riscritti perché ogni test crei da solo
+                    i dati che gli servono: da lì 42/42 verdi e deterministici. L'AI accelera, ma la qualità la verifico io.
+                </p>
+            </div></div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-5 text-center">
+    <a href="{% url 'core:home' %}#contatti" class="btn btn-outline-accent">Parliamone: scrivimi</a>
+</section>
+
+{% endblock %}

@@ -93,3 +93,18 @@ def test_form_highlight_richiede_login(client, dati_portfolio):
 
 def test_file_media_inesistente_404(client):
     assert client.get("/media/project_videos/non-esiste.mp4").status_code == 404
+
+
+def test_pagina_metodo(client):
+    response = client.get(reverse("core:metodo"))
+    assert response.status_code == 200
+    html = response.content.decode()
+    for sezione in ('id="flusso"', 'id="report"', 'id="progress"', 'id="ai"'):
+        assert sezione in html
+    assert "PROGRESS.md" in html
+    assert "Impronto" not in html
+
+
+def test_home_rimanda_alla_pagina_metodo(client):
+    html = client.get(reverse("core:home")).content.decode()
+    assert reverse("core:metodo") in html

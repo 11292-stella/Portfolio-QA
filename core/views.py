@@ -134,6 +134,10 @@ def contact_create(request):
     return redirect('/#contatti')
 
 
+def metodo(request):
+    return render(request, 'core/metodo.html')
+
+
 def project_detail(request, slug):
     progetto = get_object_or_404(Project, slug=slug)
 
