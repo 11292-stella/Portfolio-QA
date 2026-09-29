@@ -143,12 +143,17 @@ def project_detail(request, slug):
 
     tech_names = set(t.nome.lower() for t in progetto.tecnologie.all())
     report_types = []
-    if 'cypress' in tech_names:
-        report_types.append('cypress')
-    if 'playwright' in tech_names:
-        report_types.append('playwright')
-    if 'appium' in tech_names:
-        report_types.append('appium')
+    if 'robot framework' in tech_names:
+        # Report REALE della suite Robot Framework (gestionale Angular): sostituisce le
+        # simulazioni, perché qui Playwright è solo il motore di Browser Library / dei test API .NET.
+        report_types.append('robot')
+    else:
+        if 'cypress' in tech_names:
+            report_types.append('cypress')
+        if 'playwright' in tech_names:
+            report_types.append('playwright')
+        if 'appium' in tech_names:
+            report_types.append('appium')
 
     video_embed = build_video_embed(progetto)
 

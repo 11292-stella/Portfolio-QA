@@ -3,7 +3,7 @@ import json
 import pytest
 from django.urls import reverse
 
-from core.models import ContactMessage
+from core.models import ContactMessage, Project, Skill
 
 pytestmark = pytest.mark.django_db
 
@@ -49,6 +49,21 @@ def test_dettaglio_progetto(client, dati_portfolio):
     assert response.status_code == 200
     assert response.context["video_embed"] == {"type": "video", "src": "https://example.com/demo.mp4"}
     assert response.context["report_types"] == ["playwright"]
+
+
+def test_dettaglio_progetto_robot_mostra_il_report_reale(client, skills):
+    """Un progetto Robot Framework mostra il report reale, non la simulazione Playwright di Sellogic."""
+    robot = Skill.objects.create(nome="Robot Framework", categoria="framework")
+    progetto = Project.objects.create(
+        nome="Robot Framework E2E", slug="robot-e2e", descrizione="Suite E2E in Robot Framework.",
+    )
+    progetto.tecnologie.add(robot, skills["playwright"])  # Playwright qui è solo il motore di Browser Library
+    response = client.get(reverse("core:project_detail", args=["robot-e2e"]))
+    html = response.content.decode()
+    assert response.context["report_types"] == ["robot"]
+    assert "report di esecuzione (reale)" in html
+    assert "Sellogic E2E Suite" not in html
+    assert "204 != 409" in html
 
 
 def test_dettaglio_progetto_inesistente_404(client):

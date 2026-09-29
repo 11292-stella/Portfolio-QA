@@ -1,4 +1,5 @@
 {% extends "core/base.html" %}
+{% load static %}
 {% block content %}
 
 <a href="{% url 'core:home' %}" class="btn btn-outline-secondary btn-sm mb-4">&larr; torna ai progetti</a>
@@ -48,7 +49,10 @@
     </div>
 </div>
 
-{% if report_types %}
+{% if 'robot' in report_types %}
+<p class="eyebrow">// report di esecuzione (reale)</p>
+<p class="report-intro">Dati reali dall'ultima esecuzione completa della suite Robot Framework (report.html), più il &ldquo;prima e dopo&rdquo; di uno dei bug che la suite ha trovato.</p>
+{% elif report_types %}
 <p class="eyebrow">// report di esecuzione (simulazione)</p>
 <p class="report-intro">Così si presentano i report che genero a fine ciclo di test — qui ricostruiti a scopo dimostrativo, con dati di esempio coerenti con la suite reale.</p>
 {% endif %}
@@ -150,6 +154,75 @@
             <li class="allure-suite"><span class="allure-check allure-check-pass">&#10003;</span> Invio Ordine in Cucina <span class="allure-count">4/4</span></li>
             <li class="allure-suite"><span class="allure-check allure-check-pass">&#10003;</span> Modifica Ordine <span class="allure-count">4/4</span></li>
             <li class="allure-suite"><span class="allure-check allure-check-retry">&#8635;</span> Accessibilità (TalkBack) <span class="allure-count">2/4 &mdash; retry su blocco sessione driver</span></li>
+        </ul>
+    </div>
+</div>
+{% endif %}
+
+{% if 'robot' in report_types %}
+<div class="report-window mb-4">
+    <div class="report-topbar">
+        <div class="report-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="report-url">file:///robot-tests/results/report.html</span>
+    </div>
+    <div class="report-body report-body-robot">
+        <div class="rf-header">
+            <span class="rf-logo">Robot Framework Report</span>
+            <span class="rf-date">Gestionale Angular &mdash; Browser Library (Playwright)</span>
+        </div>
+        <div class="rf-summary">&#10003; All tests passed</div>
+        <div class="rf-stats">
+            <div class="rf-stat"><span class="rf-stat-num">94</span><span class="rf-stat-label">test</span></div>
+            <div class="rf-stat"><span class="rf-stat-num rf-pass">94</span><span class="rf-stat-label">pass</span></div>
+            <div class="rf-stat"><span class="rf-stat-num rf-fail">0</span><span class="rf-stat-label">fail</span></div>
+            <div class="rf-stat"><span class="rf-stat-num">7</span><span class="rf-stat-label">suite</span></div>
+        </div>
+        <p class="rf-section-title">Statistics by Suite</p>
+        <ul class="rf-suite-list">
+            <li class="rf-suite"><span class="rf-suite-name">Prodotti</span><span class="rf-bar"><span style="width:100%"></span></span><span class="rf-count">30 / 30</span></li>
+            <li class="rf-suite"><span class="rf-suite-name">Categorie</span><span class="rf-bar"><span style="width:100%"></span></span><span class="rf-count">20 / 20</span></li>
+            <li class="rf-suite"><span class="rf-suite-name">Ordini</span><span class="rf-bar"><span style="width:100%"></span></span><span class="rf-count">20 / 20</span></li>
+            <li class="rf-suite"><span class="rf-suite-name">Navigazione</span><span class="rf-bar"><span style="width:100%"></span></span><span class="rf-count">8 / 8</span></li>
+            <li class="rf-suite"><span class="rf-suite-name">Scontrini</span><span class="rf-bar"><span style="width:100%"></span></span><span class="rf-count">7 / 7</span></li>
+            <li class="rf-suite"><span class="rf-suite-name">Statistiche</span><span class="rf-bar"><span style="width:100%"></span></span><span class="rf-count">6 / 6</span></li>
+            <li class="rf-suite"><span class="rf-suite-name">Login</span><span class="rf-bar"><span style="width:100%"></span></span><span class="rf-count">3 / 3</span></li>
+        </ul>
+        <p class="rf-section-title">Statistics by Tag</p>
+        <div class="rf-tags">
+            <span class="rf-tag">crud <b>25</b></span>
+            <span class="rf-tag">validazione <b>18</b></span>
+            <span class="rf-tag">smoke <b>13</b></span>
+            <span class="rf-tag">filtri <b>12</b></span>
+            <span class="rf-tag">sicurezza <b>7</b></span>
+            <span class="rf-tag">pagamento <b>6</b></span>
+            <span class="rf-tag">regressione <b>1</b></span>
+        </div>
+    </div>
+</div>
+
+<p class="eyebrow mt-5">// un bug, dal rosso al verde</p>
+<div class="rf-bug mb-4">
+    <div class="rf-bug-col rf-bug-before">
+        <span class="rf-bug-label">prima del fix &middot; 27/09/2026</span>
+        <p class="rf-bug-test"><span class="rf-badge rf-badge-fail">FAIL</span> Categoria Con Prodotti Non Si Pu&ograve; Eliminare</p>
+        <pre class="rf-bug-code">DELETE /api/Categoria/{id}
+${risposta}[status]    409
+&rarr; 204 != 409</pre>
+        <p class="rf-bug-text">Il backend rispondeva 204 e cancellava a cascata la categoria, i suoi prodotti e le righe degli ordini storici.</p>
+        <figure class="rf-bug-shot">
+            <img src="{% static 'core/img/robot-fallito-cascade.png' %}" alt="Pagina salvata al fallimento: la ricerca della categoria non trova più nulla" loading="lazy">
+            <figcaption>Pagina salvata in automatico dal teardown al momento del fallimento: la categoria non esiste più.</figcaption>
+        </figure>
+    </div>
+    <div class="rf-bug-col rf-bug-after">
+        <span class="rf-bug-label">dopo il fix</span>
+        <p class="rf-bug-test"><span class="rf-badge rf-badge-pass">PASS</span> Categoria Con Prodotti Non Si Pu&ograve; Eliminare</p>
+        <ul class="rf-bug-list">
+            <li><b>API:</b> DELETE &rarr; <code>409 Conflict</code></li>
+            <li><b>Dati:</b> categoria e prodotti ancora presenti (verificato via API)</li>
+            <li><b>UI:</b> toast &ldquo;Impossibile eliminare la categoria&rdquo;, la tabella resta visibile</li>
+            <li><b>Fix:</b> controllo nel controller + <code>OnDelete(Restrict)</code> con migration</li>
+            <li><b>Regressione:</b> il test resta in suite con il tag <code>regressione</code>, più un test API xUnit</li>
         </ul>
     </div>
 </div>
