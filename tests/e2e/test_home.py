@@ -24,7 +24,7 @@ def test_navbar_con_cv_e_link_esterni(home: Page, live_server):
     )
     cv = home.get_by_role("link", name=re.compile("Scarica CV"))
     href = cv.get_attribute("href")
-    assert href.endswith("Stella_Marucelli_CV_v3.pdf")
+    assert href.endswith("Stella_Marucelli_CV_v4.pdf")
     # il PDF linkato esiste davvero
     assert home.request.get(live_server.url + href).ok
 

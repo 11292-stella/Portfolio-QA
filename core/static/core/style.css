@@ -1574,3 +1574,35 @@ footer {
     .rf-stats { grid-template-columns: repeat(2, 1fr); }
     .rf-suite-name { flex-basis: 90px; }
 }
+
+/* ==========================================================================
+   PAGINA RECRUITER (download CV / scheda candidato)
+   ========================================================================== */
+.recruiter-downloads { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+.recruiter-dl {
+    display: flex; flex-direction: column; gap: .4rem; text-decoration: none; color: var(--text);
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.3rem;
+    transition: border-color .2s, transform .2s;
+}
+.recruiter-dl:hover { border-color: var(--accent); transform: translateY(-2px); color: var(--text); }
+.recruiter-dl-main { border-color: rgba(52, 211, 153, .5); }
+.recruiter-dl-type {
+    align-self: flex-start; font-family: 'JetBrains Mono', monospace; font-size: .72rem; font-weight: 700;
+    color: var(--accent-green); border: 1px solid rgba(52, 211, 153, .45); border-radius: 6px; padding: .1rem .5rem;
+}
+.recruiter-dl-title { font-weight: 600; font-size: 1.05rem; }
+.recruiter-dl-desc { color: var(--text-muted); font-size: .88rem; }
+.recruiter-facts { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.3rem 1.5rem; }
+.recruiter-facts dl { display: grid; grid-template-columns: 150px 1fr; gap: .6rem 1.2rem; margin: 0; }
+.recruiter-facts dt { font-family: 'JetBrains Mono', monospace; font-size: .8rem; color: var(--accent-green); padding-top: .15rem; }
+.recruiter-facts dd { margin: 0; color: var(--text-muted); }
+.recruiter-contacts { display: flex; flex-wrap: wrap; gap: .6rem; }
+.recruiter-contacts a {
+    font-family: 'JetBrains Mono', monospace; font-size: .85rem; text-decoration: none; color: var(--accent);
+    border: 1px solid var(--border-bright); border-radius: 999px; padding: .35rem .9rem;
+}
+.recruiter-contacts a:hover { color: var(--bg); background: var(--accent); }
+@media (max-width: 575px) {
+    .recruiter-facts dl { grid-template-columns: 1fr; gap: .15rem; }
+    .recruiter-facts dd { margin-bottom: .6rem; }
+}

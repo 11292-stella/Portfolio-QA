@@ -123,3 +123,25 @@ def test_pagina_metodo(client):
 def test_home_rimanda_alla_pagina_metodo(client):
     html = client.get(reverse("core:home")).content.decode()
     assert reverse("core:metodo") in html
+
+
+def test_pagina_recruiter_con_download(client):
+    response = client.get(reverse("core:recruiter"))
+    assert response.status_code == 200
+    html = response.content.decode()
+    for file in ("Stella_Marucelli_CV_v4.pdf", "Stella_Marucelli_CV.docx", "Scheda_candidato_Stella_Marucelli.pdf"):
+        assert file in html
+    assert "25.000" in html
+    assert "Impronto" not in html
+
+
+def test_navbar_rimanda_alla_pagina_recruiter(client):
+    html = client.get(reverse("core:home")).content.decode()
+    assert reverse("core:recruiter") in html
+
+
+def test_file_scaricabili_esistono_negli_static():
+    from django.contrib.staticfiles import finders
+    for file in ("core/cv/Stella_Marucelli_CV_v4.pdf", "core/cv/Stella_Marucelli_CV.docx",
+                 "core/cv/Scheda_candidato_Stella_Marucelli.pdf"):
+        assert finders.find(file), f"manca il file statico {file}"

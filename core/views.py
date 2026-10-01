@@ -138,6 +138,11 @@ def metodo(request):
     return render(request, 'core/metodo.html')
 
 
+def recruiter(request):
+    """Pagina per recruiter: CV (PDF e Word) e scheda candidato da scaricare + dati principali."""
+    return render(request, 'core/recruiter.html')
+
+
 def project_detail(request, slug):
     progetto = get_object_or_404(Project, slug=slug)
 
@@ -176,4 +181,4 @@ def highlight_create(request, experience_id):
         form = ExperienceHighlightForm()
 
     context = {'form': form, 'experience': experience}
-    return render(request, 'core/highlight_form.html', context)
+    return render(request, 'core/highlight_form.html', context)

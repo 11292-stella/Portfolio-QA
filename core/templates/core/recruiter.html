@@ -1,0 +1,72 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Per i recruiter — Stella Marucelli{% endblock %}
+{% block content %}
+
+<section class="mb-5 metodo-hero">
+    <p class="eyebrow">// per recruiter e selezionatori</p>
+    <h1 class="metodo-title">Tutto quello che serve per una candidatura, in un posto solo</h1>
+    <p class="metodo-lead">
+        Nei moduli di candidatura mi chiedono quasi sempre le stesse informazioni: disponibilità,
+        modalità di lavoro, RAL, anni di esperienza. Le ho raccolte in una <strong>scheda candidato</strong>
+        da scaricare, insieme al CV in PDF e in Word.
+    </p>
+    <div class="metodo-stats">
+        <span><b>Disponibile</b> da subito</span>
+        <span><b>Full remote</b> o ibrido</span>
+        <span><b>Dipendente</b> o Partita IVA</span>
+    </div>
+</section>
+
+<!-- ============================ DOWNLOAD ============================ -->
+<section class="mb-5" id="download">
+    <p class="eyebrow">// da scaricare</p>
+    <div class="recruiter-downloads">
+        <a class="recruiter-dl" href="{% static 'core/cv/Stella_Marucelli_CV_v4.pdf' %}" download="Stella_Marucelli_CV.pdf">
+            <span class="recruiter-dl-type">PDF</span>
+            <span class="recruiter-dl-title">Curriculum vitae</span>
+            <span class="recruiter-dl-desc">3 pagine: competenze, progetto principale, esperienza e altri progetti.</span>
+        </a>
+        <a class="recruiter-dl" href="{% static 'core/cv/Stella_Marucelli_CV.docx' %}" download="Stella_Marucelli_CV.docx">
+            <span class="recruiter-dl-type">WORD</span>
+            <span class="recruiter-dl-title">Curriculum vitae (.docx)</span>
+            <span class="recruiter-dl-desc">Lo stesso CV in formato modificabile, per i portali e i template aziendali.</span>
+        </a>
+        <a class="recruiter-dl recruiter-dl-main" href="{% static 'core/cv/Scheda_candidato_Stella_Marucelli.pdf' %}" download="Scheda_candidato_Stella_Marucelli.pdf">
+            <span class="recruiter-dl-type">PDF</span>
+            <span class="recruiter-dl-title">Scheda candidato</span>
+            <span class="recruiter-dl-desc">Disponibilità, sede e modalità di lavoro, RAL / tariffa, esperienza, lingue e contatti in una pagina.</span>
+        </a>
+    </div>
+</section>
+
+<!-- ============================ IN SINTESI ============================ -->
+<section class="mb-5" id="sintesi">
+    <p class="eyebrow">// in sintesi</p>
+    <div class="recruiter-facts">
+        <dl>
+            <dt>Ruoli</dt><dd>QA Automation Engineer, Full Stack Developer o ruoli ibridi</dd>
+            <dt>Disponibilità</dt><dd>da subito, nessun preavviso (contratto a tempo determinato concluso a settembre 2026)</dd>
+            <dt>Esperienza</dt><dd>circa 1 anno in azienda come QA Automation e sviluppatrice Flutter, più formazione e progetti personali dal 2025</dd>
+            <dt>Modalità</dt><dd>full remote preferito; ibrido con presenza regolare se la sede è vicina (Firenze, Valdarno, Arezzo), poche presenze al mese se distante; trasferimento valutabile</dd>
+            <dt>Domicilio</dt><dd>Reggello (FI) — senza patente, mi sposto con i mezzi pubblici</dd>
+            <dt>Retribuzione</dt><dd>RAL desiderata 25.000 € come dipendente; in Partita IVA 150 € / giorno, trattabile in base a durata e impegno</dd>
+            <dt>Lingue</dt><dd>italiano madrelingua, inglese tecnico</dd>
+            <dt>Prova tecnica</dt><dd>disponibile, sia come esercizio a casa sia in live</dd>
+        </dl>
+    </div>
+</section>
+
+<!-- ============================ CONTATTI ============================ -->
+<section class="mb-5" id="contatti-recruiter">
+    <p class="eyebrow">// contatti</p>
+    <div class="recruiter-contacts">
+        <a href="mailto:stella.marucelli@gmail.com">stella.marucelli@gmail.com</a>
+        <a href="tel:+393780662596">+39 378 066 2596</a>
+        <a href="https://www.linkedin.com/in/stella-marucelli/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/11292-stella" target="_blank" rel="noopener">GitHub</a>
+        <a href="{% url 'core:home' %}#contatti">Modulo di contatto</a>
+    </div>
+</section>
+
+{% endblock %}
