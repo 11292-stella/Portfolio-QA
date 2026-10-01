@@ -22,6 +22,20 @@ def _static_senza_manifest(settings):
     }
 
 
+@pytest.fixture(autouse=True)
+def _db_senza_dati_delle_migrazioni(request):
+    """Le migrazioni di dati (es. 0010, il progetto Appium + Cucumber) inseriscono
+    righe reali nel database: nei test partiamo da tabelle vuote, così ogni test
+    vede solo i dati che crea lui."""
+    marker = request.node.get_closest_marker("django_db")
+    if marker is None:
+        return
+    fixture = "transactional_db" if marker.kwargs.get("transaction") else "db"
+    request.getfixturevalue(fixture)
+    Project.objects.all().delete()
+    Skill.objects.all().delete()
+
+
 @pytest.fixture(scope="session")
 def browser_type_launch_args(browser_type_launch_args):
     """Permette di usare un Chromium già installato (variabile PW_CHROMIUM_EXECUTABLE)."""

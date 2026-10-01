@@ -44,3 +44,21 @@ def test_migration_rimuove_nome_piattaforma(dati_portfolio):
     h.refresh_from_db()
     assert "Impronto" not in h.dettaglio
     assert "una piattaforma gestionale web per la ristorazione" in h.dettaglio
+
+
+def test_migrazione_aggiunge_il_progetto_appium_cucumber():
+    """La migrazione 0010 crea il progetto e collega le tecnologie (senza duplicarle)."""
+    import importlib
+    from django.apps import apps
+    from core.models import Project, Skill
+
+    Skill.objects.create(nome="appium", categoria="framework")   # già esistente, scritta in minuscolo
+    migrazione = importlib.import_module("core.migrations.0010_progetto_appium_cucumber")
+    migrazione.aggiungi_progetto(apps, None)
+    migrazione.aggiungi_progetto(apps, None)                       # seconda volta: non deve duplicare
+
+    progetto = Project.objects.get(slug=migrazione.SLUG)
+    assert Project.objects.filter(slug=migrazione.SLUG).count() == 1
+    nomi = {t.nome.lower() for t in progetto.tecnologie.all()}
+    assert {"appium", "cucumber", "java", "rest assured"} <= nomi
+    assert Skill.objects.filter(nome__iexact="appium").count() == 1
