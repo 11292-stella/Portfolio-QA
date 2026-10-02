@@ -62,3 +62,27 @@ def test_migrazione_aggiunge_il_progetto_appium_cucumber():
     nomi = {t.nome.lower() for t in progetto.tecnologie.all()}
     assert {"appium", "cucumber", "java", "rest assured"} <= nomi
     assert Skill.objects.filter(nome__iexact="appium").count() == 1
+
+
+def test_migrazione_collega_il_video_al_progetto_appium_cucumber():
+    """La migrazione 0011 imposta il video statico, senza sovrascrivere un video già scelto."""
+    import importlib
+    from django.apps import apps
+    from django.contrib.staticfiles import finders
+    from core.models import Project
+    from core.views import build_video_embed
+
+    progetto = importlib.import_module("core.migrations.0010_progetto_appium_cucumber")
+    video = importlib.import_module("core.migrations.0011_video_appium_cucumber")
+    progetto.aggiungi_progetto(apps, None)
+    video.collega_video(apps, None)
+
+    p = Project.objects.get(slug=video.SLUG)
+    assert build_video_embed(p) == {"type": "video", "src": video.VIDEO}
+    assert finders.find("core/video/appium-cucumber-demo.mp4")
+
+    p.video_demo_url = "https://youtu.be/abc123"
+    p.save()
+    video.collega_video(apps, None)
+    p.refresh_from_db()
+    assert p.video_demo_url == "https://youtu.be/abc123"
