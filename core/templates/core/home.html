@@ -4,6 +4,19 @@
 
 <button type="button" class="skip-anim-btn" id="skip-anim">&#9193; Salta animazioni</button>
 
+<aside class="recruiter-banner mb-5" id="per-i-recruiter" aria-label="Per i recruiter">
+    <div class="recruiter-banner-body">
+        <span class="recruiter-banner-eyebrow"><span class="nav-recruiter-dot" aria-hidden="true"></span> Per i recruiter</span>
+        <p class="recruiter-banner-title">Disponibile da subito · full remote o ibrido · dipendente o P.IVA</p>
+        <p class="recruiter-banner-text">Scheda candidato pronta con disponibilità, modalità di lavoro e RAL / tariffa, e CV anche in formato Word.</p>
+    </div>
+    <div class="recruiter-banner-actions">
+        <a href="{% url 'core:recruiter' %}" class="recruiter-banner-cta">Apri l'area recruiter &rarr;</a>
+        <a href="{% static 'core/cv/Scheda_candidato_Stella_Marucelli.pdf' %}" class="recruiter-banner-link" download="Scheda_candidato_Stella_Marucelli.pdf">Scheda candidato (PDF)</a>
+        <a href="{% static 'core/cv/Stella_Marucelli_CV.docx' %}" class="recruiter-banner-link" download="Stella_Marucelli_CV.docx">CV in Word</a>
+    </div>
+</aside>
+
 <section class="mb-5">
     <p class="eyebrow">// chi sono</p>
 

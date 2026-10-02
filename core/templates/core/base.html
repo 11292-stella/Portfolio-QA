@@ -17,7 +17,17 @@
 <body>
 
     <nav class="navbar px-4">
-        <a class="navbar-brand" href="{% url 'core:home' %}">Stella Marucelli</a>
+        <div class="d-flex align-items-center gap-3">
+            <a class="navbar-brand" href="{% url 'core:home' %}">Stella Marucelli</a>
+            {% if request.resolver_match.url_name != 'recruiter' %}
+            <a href="{% url 'core:recruiter' %}" class="nav-recruiter-pill" aria-label="Area recruiter: scheda candidato e CV da scaricare">
+                <span class="nav-recruiter-dot" aria-hidden="true"></span>
+                <span class="d-none d-sm-inline">Disponibile da subito ·</span>
+                <strong>Area recruiter</strong>
+                <span aria-hidden="true">&rarr;</span>
+            </a>
+            {% endif %}
+        </div>
         <div class="d-flex align-items-center gap-2">
             <span class="role-tag d-none d-lg-inline-block">QA Automation Engineer & Full Stack Developer</span>
             <a href="{% url 'core:metodo' %}" class="nav-link-plain">Metodo</a>
@@ -50,4 +60,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html>

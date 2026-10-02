@@ -140,6 +140,18 @@ def test_navbar_rimanda_alla_pagina_recruiter(client):
     assert reverse("core:recruiter") in html
 
 
+def test_home_mostra_il_banner_per_i_recruiter(client):
+    html = client.get(reverse("core:home")).content.decode()
+    assert 'id="per-i-recruiter"' in html
+    assert "Scheda_candidato_Stella_Marucelli.pdf" in html
+    assert "nav-recruiter-pill" in html
+
+
+def test_la_pagina_recruiter_non_mostra_la_pillola_che_rimanda_a_se_stessa(client):
+    html = client.get(reverse("core:recruiter")).content.decode()
+    assert "nav-recruiter-pill" not in html
+
+
 def test_file_scaricabili_esistono_negli_static():
     from django.contrib.staticfiles import finders
     for file in ("core/cv/Stella_Marucelli_CV_v4.pdf", "core/cv/Stella_Marucelli_CV.docx",
