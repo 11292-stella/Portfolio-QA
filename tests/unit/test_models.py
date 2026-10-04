@@ -86,3 +86,25 @@ def test_migrazione_collega_il_video_al_progetto_appium_cucumber():
     video.collega_video(apps, None)
     p.refresh_from_db()
     assert p.video_demo_url == "https://youtu.be/abc123"
+
+
+def test_migrazione_aggiunge_il_progetto_selenium_cucumber_con_video():
+    """La migrazione 0012 crea il progetto con il video statico e le tecnologie (senza duplicarle)."""
+    import importlib
+    from django.apps import apps
+    from django.contrib.staticfiles import finders
+    from core.models import Project, Skill
+    from core.views import build_video_embed
+
+    Skill.objects.create(nome="selenium", categoria="framework")  # già esistente, scritta in minuscolo
+    migrazione = importlib.import_module("core.migrations.0012_progetto_selenium_cucumber")
+    migrazione.aggiungi_progetto(apps, None)
+    migrazione.aggiungi_progetto(apps, None)                      # seconda volta: non deve duplicare
+
+    progetto = Project.objects.get(slug=migrazione.SLUG)
+    assert Project.objects.filter(slug=migrazione.SLUG).count() == 1
+    nomi = {t.nome.lower() for t in progetto.tecnologie.all()}
+    assert {"selenium", "cucumber", "java", "junit 5", "rest assured"} <= nomi
+    assert Skill.objects.filter(nome__iexact="selenium").count() == 1
+    assert build_video_embed(progetto) == {"type": "video", "src": migrazione.VIDEO}
+    assert finders.find("core/video/selenium-cucumber-demo.mp4")
