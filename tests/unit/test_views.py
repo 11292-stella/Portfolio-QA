@@ -129,7 +129,7 @@ def test_pagina_recruiter_con_download(client):
     response = client.get(reverse("core:recruiter"))
     assert response.status_code == 200
     html = response.content.decode()
-    for file in ("Stella_Marucelli_CV_v4.pdf", "Stella_Marucelli_CV.docx", "Scheda_candidato_Stella_Marucelli.pdf"):
+    for file in ("Stella_Marucelli_CV_v5.pdf", "Stella_Marucelli_CV.docx", "Scheda_candidato_Stella_Marucelli.pdf"):
         assert file in html
     assert "25.000" in html
     assert "Impronto" not in html
@@ -154,6 +154,19 @@ def test_la_pagina_recruiter_non_mostra_la_pillola_che_rimanda_a_se_stessa(clien
 
 def test_file_scaricabili_esistono_negli_static():
     from django.contrib.staticfiles import finders
-    for file in ("core/cv/Stella_Marucelli_CV_v4.pdf", "core/cv/Stella_Marucelli_CV.docx",
+    for file in ("core/cv/Stella_Marucelli_CV_v5.pdf", "core/cv/Stella_Marucelli_CV.docx",
                  "core/cv/Scheda_candidato_Stella_Marucelli.pdf"):
         assert finders.find(file), f"manca il file statico {file}"
+
+
+def test_home_mostra_l_esperienza_progetti_personali_dal_2024(client):
+    """La migrazione 0013 crea l'esperienza "Progetti personali" (2024 — oggi), come nel CV."""
+    html = client.get(reverse("core:home")).content.decode()
+    assert 'id="esperienza-progetti-personali"' in html
+    assert "Full Stack Developer &amp; Test Automation" in html
+    assert "2024 — oggi" in html
+
+
+def test_pagina_recruiter_mostra_la_data_di_nascita(client):
+    html = client.get(reverse("core:recruiter")).content.decode()
+    assert "02/11/1992" in html

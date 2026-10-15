@@ -9,6 +9,14 @@ from .models import Project, Skill, Experience, ExperienceHighlight, Formazione
 from .forms import ExperienceHighlightForm, ContactForm
 
 
+# Tecnologie mostrate come badge nella card "Progetti personali" della home
+TECH_PROGETTI_PERSONALI = [
+    "ASP.NET Core", "Angular", "Flutter", "Django", "PostgreSQL",
+    "Robot Framework", "Playwright", "Selenium", "Appium", "Cucumber",
+    "Docker", "GitLab CI", "GitHub Actions",
+]
+
+
 def build_video_embed(progetto):
     """Prepara i dati per l'embed video: priorità al file caricato, poi al link esterno."""
     if not progetto:
@@ -75,6 +83,7 @@ def _build_home_context(contact_form=None):
 
     exp_sellogic = Experience.objects.filter(azienda__icontains='Sellogic').first()
     exp_iliad = Experience.objects.filter(azienda__icontains='Iliad').first()
+    exp_personali = Experience.objects.filter(azienda__icontains='Progetti personali').first()
 
     sellogic_tech = []
     if exp_sellogic:
@@ -106,6 +115,8 @@ def _build_home_context(contact_form=None):
         'skills_by_category': skills_by_category,
         'exp_sellogic': exp_sellogic,
         'exp_iliad': exp_iliad,
+        'exp_personali': exp_personali,
+        'tech_personali': TECH_PROGETTI_PERSONALI,
         'sellogic_tech': sellogic_tech,
         'sellogic_sim': build_experience_sim(exp_sellogic),
         'iliad_sim': build_experience_sim(exp_iliad),
@@ -181,4 +192,4 @@ def highlight_create(request, experience_id):
         form = ExperienceHighlightForm()
 
     context = {'form': form, 'experience': experience}
-    return render(request, 'core/highlight_form.html', context)
+    return render(request, 'core/highlight_form.html', context)

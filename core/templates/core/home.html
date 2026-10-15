@@ -110,6 +110,29 @@
 
 {% endif %}
 
+{% if exp_personali %}
+<section class="mb-5" id="esperienza-progetti-personali">
+    <p class="eyebrow">// esperienza — progetti personali</p>
+
+    <div class="card project-card experience-card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                <div>
+                    <h5 class="card-title mb-1">{{ exp_personali.ruolo }}</h5>
+                    <span class="project-meta">{{ exp_personali.azienda }}</span>
+                </div>
+                <span class="project-meta">{{ exp_personali.data_inizio|date:"Y" }} — {% if exp_personali.data_fine %}{{ exp_personali.data_fine|date:"Y" }}{% else %}oggi{% endif %}</span>
+            </div>
+            <div class="experience-desc">{{ exp_personali.descrizione|linebreaksbr }}</div>
+            <div class="mt-3">
+                {% for tech in tech_personali %}<span class="badge badge-tech me-1 mb-1">{{ tech }}</span>{% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endif %}
+
 {% if exp_iliad %}
 {{ iliad_sim|json_script:"iliad-sim-data" }}
 <section class="mb-5">
