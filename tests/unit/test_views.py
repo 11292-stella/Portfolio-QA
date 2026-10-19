@@ -129,7 +129,7 @@ def test_pagina_recruiter_con_download(client):
     response = client.get(reverse("core:recruiter"))
     assert response.status_code == 200
     html = response.content.decode()
-    for file in ("Stella_Marucelli_CV_v5.pdf", "Stella_Marucelli_CV.docx", "Scheda_candidato_Stella_Marucelli.pdf"):
+    for file in ("Stella_Marucelli_CV_v6.pdf", "Stella_Marucelli_CV.docx", "Scheda_candidato_Stella_Marucelli.pdf"):
         assert file in html
     assert "25.000" in html
     assert "Impronto" not in html
@@ -154,7 +154,7 @@ def test_la_pagina_recruiter_non_mostra_la_pillola_che_rimanda_a_se_stessa(clien
 
 def test_file_scaricabili_esistono_negli_static():
     from django.contrib.staticfiles import finders
-    for file in ("core/cv/Stella_Marucelli_CV_v5.pdf", "core/cv/Stella_Marucelli_CV.docx",
+    for file in ("core/cv/Stella_Marucelli_CV_v6.pdf", "core/cv/Stella_Marucelli_CV.docx",
                  "core/cv/Scheda_candidato_Stella_Marucelli.pdf"):
         assert finders.find(file), f"manca il file statico {file}"
 
