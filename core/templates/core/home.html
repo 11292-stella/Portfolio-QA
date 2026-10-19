@@ -192,7 +192,8 @@
 
 {% endif %}
 
-{% if progetto_principale %}
+{% for principale in progetti_principali %}
+{% with progetto_principale=principale.progetto principale_video=principale.video %}
 <section class="mb-5">
     <div class="card hero-project-card">
         <div class="card-body">
@@ -232,7 +233,8 @@
         </div>
     </div>
 </section>
-{% endif %}
+{% endwith %}
+{% endfor %}
 
 <section class="mb-5" id="metodo-banner">
     <a href="{% url 'core:metodo' %}" class="metodo-banner">

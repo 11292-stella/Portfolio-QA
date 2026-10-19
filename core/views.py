@@ -73,8 +73,10 @@ def build_experience_sim(experience):
 
 
 def _build_home_context(contact_form=None):
-    progetto_principale = Project.objects.filter(progetto_principale=True).first()
-    progetti = Project.objects.exclude(pk=getattr(progetto_principale, 'pk', None)).order_by('-in_evidenza', '-data_creazione')
+    # Possono esserci più progetti principali (card grandi in cima): il più recente per primo
+    principali = list(Project.objects.filter(progetto_principale=True).order_by('-data_creazione'))
+    progetto_principale = principali[0] if principali else None
+    progetti = Project.objects.exclude(pk__in=[p.pk for p in principali]).order_by('-in_evidenza', '-data_creazione')
     skills = Skill.objects.all().order_by('categoria', 'nome')
 
     skills_by_category = {}
@@ -92,6 +94,7 @@ def _build_home_context(contact_form=None):
         ).distinct().order_by('nome')
 
     principale_video = build_video_embed(progetto_principale)
+    progetti_principali = [{'progetto': p, 'video': build_video_embed(p)} for p in principali]
 
     formazioni = Formazione.objects.prefetch_related('highlights__tecnologie').order_by('ordine')
 
@@ -111,6 +114,7 @@ def _build_home_context(contact_form=None):
     return {
         'progetto_principale': progetto_principale,
         'principale_video': principale_video,
+        'progetti_principali': progetti_principali,
         'progetti': progetti,
         'skills_by_category': skills_by_category,
         'exp_sellogic': exp_sellogic,
